@@ -89,6 +89,7 @@ use:shortcut={{
     return false;
 }}}
 >
+
 <header class="grid grid-cols-[0fr,1fr,0fr] items-center bg-base-300 gap-4 relative h-12">
     <h1 class="text-xl font-bold ms-4">GEOS</h1>
     
