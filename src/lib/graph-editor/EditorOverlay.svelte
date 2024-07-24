@@ -23,19 +23,17 @@ import ClearButton from "./buttons/ClearButton.svelte";
 >
   <!-- Top left -->
   <div class="grid gap-2 justify-start place-content-start">
-    <Toolbar>
+    <Toolbar class="justify-start">
       <SaveButton />
       <LoadButton />
       <DownloadButton />
       <CreateMacroBlock />
       <ClearButton />
     </Toolbar>
-    <div
-      class="grid grid-flow-col justify-start grid-rows-2 sm:grid-rows-1 gap-2 ms-2"
-    >
+    <Toolbar class="justify-start ms-2">
       <UndoButton />
       <RedoButton />
-    </div>
+    </Toolbar>
   </div>
   <div class="grid justify-end place-content-start gap-2">
     <Toolbar class="justify-end">
