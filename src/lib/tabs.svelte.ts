@@ -1,5 +1,4 @@
 import { newUuid, type SaveData } from "@selenite/commons";
-import { tick } from "svelte";
 
 export type Tab = {
   label: string;
@@ -35,7 +34,6 @@ export class Tabs {
 
   set selected(tab: Tab | undefined) {
     this.#selected = tab;
-    console.log(tab)
     if (tab?.onselected) tab.onselected();
   }
 

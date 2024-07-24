@@ -1,22 +1,28 @@
 <script lang="ts">
-  import Editor from "./Editor.svelte";
-  import { getContext, persisted } from "$lib";
+  import Editor from "./graph-editor/Editor.svelte";
+  import { getContext, persisted, setContext, type Contexts } from "$lib";
   import { newUuid, type SaveData } from "@selenite/commons";
   import type { NodeEditor, NodeFactory } from "@selenite/graph-editor";
   import { SvelteSet } from "svelte/reactivity";
+  import EditorOverlay from "./graph-editor/EditorOverlay.svelte";
 
   const tabs = getContext("tabs");
   tabs.defaultAddCallback = addEditor;
 
-  const savedGraphs  = persisted<Record<string, SaveData<NodeEditor>>>('saved-graphs', {})
-  const savedSelectedId = persisted<string | undefined>('selected-graph', undefined)
-  const initialGraphs = $savedGraphs
+  const savedGraphs = persisted<Record<string, SaveData<NodeEditor>>>(
+    "saved-graphs",
+    {}
+  );
+  const savedSelectedId = persisted<string | undefined>(
+    "selected-graph",
+    undefined
+  );
+  const initialGraphs = $savedGraphs;
   let factories = $state<Record<string, NodeFactory | undefined>>({});
   const deleted = new SvelteSet();
 
   function addEditor(id?: string) {
-    if (id === undefined)
-        id = newUuid("graph-editor");
+    if (id === undefined) id = newUuid("graph-editor");
     factories[id] = undefined;
     tabs.add({
       id,
@@ -30,47 +36,62 @@
       set label(s: string) {
         console.log("setting label", s);
         const editor = factories[id]?.editor;
-        if (editor)
-          editor.graphName = s;
+        if (editor) editor.graphName = s;
       },
     });
   }
 
   // Load save
   for (const id in $savedGraphs) {
-    addEditor(id)
+    addEditor(id);
   }
-  if ($savedSelectedId) tabs.select($savedSelectedId)
+  if ($savedSelectedId) tabs.select($savedSelectedId);
 
   // Add an editor if there are none
   $effect(() => {
     if (tabs.length === 0) {
       addEditor();
     }
-  })
+  });
 
   /** Saves graphs. */
   function save() {
-    console.log("Save editors.")
+    console.log("Save editors.");
     $savedSelectedId = tabs.selected?.id;
-    const res: Record<string, SaveData<NodeEditor>> = {}
+    const res: Record<string, SaveData<NodeEditor>> = {};
     for (const id in factories) {
       if (factories[id]) {
         res[id] = factories[id].editor.toJSON();
       }
     }
     $savedGraphs = res;
-    console.debug("Saved graphs", $savedGraphs)
+    console.debug("Saved graphs", $savedGraphs);
   }
 
-  const saves = getContext('saves')
+  const saves = getContext("saves");
   saves.push(save);
+
+  setContext("editor", {
+    get activeFactory() {
+      return factories[tabs.selected?.id ?? ""];
+    },
+    get factories() {
+      return Object.values(factories).filter((f) => f !== undefined);
+    }
+  });
 </script>
 
 <div class="h-full w-full relative">
+  <EditorOverlay class="absolute top-0 z-10 w-full h-full" />
   {#each Object.keys(factories) as id (id)}
     {#if !deleted.has(id)}
-      <Editor bind:factory={factories[id]} saveData={initialGraphs[id]} class="absolute inset-0 {id === tabs.selected?.id ? "opacity-100" : "opacity-0 pointer-events-none"}"/>
+      <Editor
+        bind:factory={factories[id]}
+        saveData={initialGraphs[id]}
+        class="absolute inset-0 {id === tabs.selected?.id
+          ? 'opacity-100'
+          : 'opacity-0 pointer-events-none'}"
+      />
     {/if}
   {/each}
 </div>

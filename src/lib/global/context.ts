@@ -1,4 +1,5 @@
 import type { Tabs } from "$lib/tabs.svelte"
+import type { NodeFactory } from "@selenite/graph-editor"
 import { getContext as baseGetContext, setContext as baseSetContext} from "svelte"
 
 /**
@@ -7,6 +8,14 @@ import { getContext as baseGetContext, setContext as baseSetContext} from "svelt
 export type Contexts = {
     tabs: Tabs,
     saves: (() => void)[]
+    /** Save function to save everything. */
+    save: () => void
+
+    /** Editor context */
+    editor: {
+        factories: NodeFactory[]
+        activeFactory?: NodeFactory
+    }
 }
 
 /** Retrieves the context that belongs to the closest parent component
