@@ -1,6 +1,6 @@
 {
   "productName": "selenite-geos-graph-editor",
-  "version": "0.0.1",
+  "version": "../package.json",
   "identifier": "fr.selenite.geos-graph-editor",
   "build": {
     "beforeDevCommand": "bun run dev",
