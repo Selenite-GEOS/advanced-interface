@@ -4,6 +4,7 @@
 
   import EditorButton from "../EditorButton.svelte";
   import { faTableCells } from "@fortawesome/free-solid-svg-icons";
+  import SmallEditorButton from "../SmallEditorButton.svelte";
 
   let isGridDisplayed = persisted("isGridDisplayed", true);
 
@@ -30,7 +31,7 @@
   }
 </script>
 
-<EditorButton
+<SmallEditorButton
   label="Grid"
   icon={faTableCells}
   class={$isGridDisplayed ? "" : "text-opacity-50"}

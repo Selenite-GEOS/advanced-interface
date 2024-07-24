@@ -31,7 +31,7 @@ import ClearButton from "./buttons/ClearButton.svelte";
       <ClearButton />
     </Toolbar>
     <div
-      class="grid grid-flow-col justify-start grid-rows-2 sm:grid-rows-1 gap-2"
+      class="grid grid-flow-col justify-start grid-rows-2 sm:grid-rows-1 gap-2 ms-2"
     >
       <UndoButton />
       <RedoButton />
@@ -42,7 +42,7 @@ import ClearButton from "./buttons/ClearButton.svelte";
       <CenterViewButton />
       <CodeEditorButton />
     </Toolbar>
-    <Toolbar class="justify-end">
+    <Toolbar class="justify-end me-2">
       <GridButton />
     </Toolbar>
   </div>
