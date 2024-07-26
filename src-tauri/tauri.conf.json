@@ -1,5 +1,5 @@
 {
-  "productName": "GEOS Graph Editor",
+  "productName": "Selenite",
   "version": "../package.json",
   "identifier": "fr.selenite.geos-graph-editor",
   "build": {
