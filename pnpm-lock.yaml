@@ -57,6 +57,9 @@ importers:
       daisyui:
         specifier: ^4.12.10
         version: 4.12.10(postcss@8.4.40)
+      fast-xml-parser:
+        specifier: ^4.4.0
+        version: 4.4.0
       monaco-editor:
         specifier: ^0.50.0
         version: 0.50.0
