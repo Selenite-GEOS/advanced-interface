@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { GeosSchema } from '$lib/geos';
+import type { XmlSchema } from '@selenite/commons';
 import { ErrorWNotif } from '@selenite/graph-editor';
 import { XMLParser, XMLBuilder, XMLValidator } from 'fast-xml-parser';
 import type { languages, editor, Position } from 'monaco-editor/esm/vs/editor/editor.api';
@@ -278,7 +278,7 @@ export function getGeosXmlCompletionItemProvider({
 	geosSchema,
 	monaco
 }: {
-	geosSchema: GeosSchema;
+	geosSchema: XmlSchema;
 	monaco: typeof Monaco;
 }): languages.CompletionItemProvider {
 	return {
