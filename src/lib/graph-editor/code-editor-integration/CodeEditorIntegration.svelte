@@ -26,7 +26,7 @@
     type AreaExtra,
     GetNameNode,
   } from "@selenite/graph-editor";
-  import { AreaExtensions, AreaPlugin, NodeView } from "rete-area-plugin";
+  import { AreaExtensions, AreaPlugin, type NodeView } from "rete-area-plugin";
   
   import type { XmlSchema } from "@selenite/commons";
   import { get } from "svelte/store";
