@@ -1,4 +1,4 @@
-export * from './context'
+export * from './context.svelte'
 export * from './theme.svelte'
 import { persisted as basePersisted } from '@selenite/commons'
 

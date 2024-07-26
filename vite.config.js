@@ -1,9 +1,9 @@
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
-
+import wasmPack from 'vite-plugin-wasm-pack'
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [sveltekit()],
+  plugins: [sveltekit(), wasmPack([], ['selenite-commons-rs'])],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

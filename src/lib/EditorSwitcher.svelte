@@ -1,11 +1,12 @@
 <script lang="ts">
   import Editor from "./graph-editor/Editor.svelte";
-  import { getContext, persisted, setContext, type Contexts } from "$lib";
+  import { getContext, persisted, setContext } from "$lib";
   import { newUuid, type SaveData } from "@selenite/commons";
   import type { NodeEditor, NodeFactory } from "@selenite/graph-editor";
   import { SvelteSet } from "svelte/reactivity";
   import EditorOverlay from "./graph-editor/EditorOverlay.svelte";
-
+  import GraphBrowser from "./GraphBrowser.svelte";
+  import CodeEditorIntegration from "./graph-editor/code-editor-integration/CodeEditorIntegration.svelte";
   const tabs = getContext("tabs");
   tabs.defaultAddCallback = addEditor;
 
@@ -53,13 +54,12 @@
       addEditor();
     }
   });
-
   /** Saves graphs. */
   function save() {
     console.log("Save editors.");
     $savedSelectedId = tabs.selected?.id;
     const res: Record<string, SaveData<NodeEditor>> = {};
-    for (const id in factories) {
+    for (const {id} of tabs) {
       if (factories[id]) {
         res[id] = factories[id].editor.toJSON();
       }
@@ -69,29 +69,47 @@
   }
 
   const saves = getContext("saves");
-  saves.push(save);
+  saves.add(save);
 
+  let displayCodeEditor = persisted("display-code-editor", false);
   setContext("editor", {
     get activeFactory() {
       return factories[tabs.selected?.id ?? ""];
     },
     get factories() {
       return Object.values(factories).filter((f) => f !== undefined);
-    }
+    },
+    get displayCodeEditor() {
+      return $displayCodeEditor;
+    },
+    set displayCodeEditor(value: boolean) {
+      $displayCodeEditor = value;
+    },
   });
 </script>
 
-<div class="h-full w-full relative">
-  <EditorOverlay class="absolute top-0 z-10 w-full h-full" />
-  {#each Object.keys(factories) as id (id)}
-    {#if !deleted.has(id)}
-      <Editor
-        bind:factory={factories[id]}
-        saveData={initialGraphs[id]}
-        class="absolute inset-0 {id === tabs.selected?.id
-          ? 'opacity-100'
-          : 'opacity-0 pointer-events-none'}"
-      />
+<div class="h-full w-full grid grid-cols-[0fr,1fr,0fr]">
+  <!-- Left side bar -->
+  <aside class="h-full bg-base-200">
+    <GraphBrowser />
+  </aside>
+  <div class="h-full relative">
+    <EditorOverlay class="absolute top-0 z-10 w-full h-full" />
+    {#each Object.keys(factories) as id (id)}
+      {#if !deleted.has(id)}
+        <Editor
+          bind:factory={factories[id]}
+          saveData={initialGraphs[id]}
+          class="absolute inset-0 {id === tabs.selected?.id
+            ? 'opacity-100'
+            : 'opacity-0 pointer-events-none -z-50'}"
+        />
+      {/if}
+    {/each}
+  </div>
+  <aside class="h-full">
+    {#if $displayCodeEditor}
+    <CodeEditorIntegration />
     {/if}
-  {/each}
+  </aside>
 </div>

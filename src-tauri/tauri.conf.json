@@ -1,5 +1,5 @@
 {
-  "productName": "GEOS Graph Editor",
+  "productName": "Selenite",
   "version": "../package.json",
   "identifier": "fr.selenite.geos-graph-editor",
   "build": {
@@ -12,8 +12,8 @@
     "windows": [
       {
         "title": "Selenite - GEOS Graph Editor",
-        "width": 800,
-        "height": 600,
+        "width": 1200,
+        "height": 700,
         "center": true,
         "resizable": true,
         "maximized": true

@@ -1,13 +1,19 @@
 import type { Tabs } from "$lib/tabs.svelte"
+import { XmlSchema } from "@selenite/commons"
 import type { NodeFactory } from "@selenite/graph-editor"
 import { getContext as baseGetContext, setContext as baseSetContext} from "svelte"
+
+
+export class GeosContext {
+    schema = $state<XmlSchema>()
+}
 
 /**
  * Available contexts through the context api.
  */
 export type Contexts = {
     tabs: Tabs,
-    saves: (() => void)[]
+    saves: Set<() => void>
     /** Save function to save everything. */
     save: () => void
 
@@ -15,7 +21,9 @@ export type Contexts = {
     editor: {
         factories: NodeFactory[]
         activeFactory?: NodeFactory
+        displayCodeEditor: boolean
     }
+    geos: GeosContext
 }
 
 /** Retrieves the context that belongs to the closest parent component

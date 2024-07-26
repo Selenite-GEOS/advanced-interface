@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { persisted, setContext, Tabs, type Tab, type Contexts } from '$lib';
-  import { draggableItem, horizontalScroll, scrollIntoView, shortcut, takeFocus, type SaveData } from '@selenite/commons';
+  import { persisted, setContext, Tabs, type Tab, type Contexts, GeosContext } from '$lib';
+  import { draggableItem, horizontalScroll, parseXsdFromUrl, scrollIntoView, shortcut, takeFocus, XmlSchema, type SaveData } from '@selenite/commons';
   import {notifications, NotificationsComponent, ContextMenuComponent, ModalComponent, Modal} from '@selenite/graph-editor'
     import '../app.css'
     import {faEllipsisH, faPlus, faTimes} from '@fortawesome/free-solid-svg-icons'
@@ -14,7 +14,7 @@
 
     const tabs = new Tabs();
     setContext('tabs', tabs)
-    const saveCallbacks: Contexts["saves"] = $state([])
+    const saveCallbacks: Contexts["saves"] = $state(new Set())
     setContext('saves', saveCallbacks);
 
     function save() {
@@ -23,6 +23,7 @@
             try {
                 saveCallback()
             } catch (e) {
+                console.error(e)
                 numErrors++
             }
         }
@@ -32,14 +33,33 @@
     notifications.error({message: 'Some errors occured while saving.', title: 'Save'})
     }
     setContext('save', save)
+    const geosContext = $state(new GeosContext())
+    let geosSchema = $state<XmlSchema>();
+    setContext('geos', {
+        get schema() {
+            return geosSchema
+        },
+        set schema(schema) {
+            geosSchema = schema
+        }
+    })
+    // Parse XML Schema Definition file for GEOS
+    $effect(() => {
+        parseXsdFromUrl('geos_schema.xsd').then(schema => {
+            console.log('GEOS Schema parsed', schema)
+            geosSchema = schema
+        })
+    })
+
+    
 </script>
 
 {#snippet RenameTabModal(tab: Tab)}
 <input bind:value={tab.label} class="input input-bordered text-base-content" />
 {/snippet}
 
-<div class="grid grid-rows-[0fr,1fr] h-screen w-screen overflow-hidden" 
-use:shortcut={{key: 's', ctrl: true, action: save}}
+<div class="grid grid-rows-[0fr,1fr] h-screen w-screen overflow-clip" 
+use:shortcut={{key: 's', ctrl: true, action: save, ignoreElements:[]}}
 use:shortcut={{
     shortcuts(e) {
         // Tabs shortcuts
@@ -58,7 +78,8 @@ use:shortcut={{
 }}}
 >
 
-<header class="grid grid-cols-[0fr,1fr,0fr] items-center bg-base-300 gap-4 relative h-12">
+
+<header class="grid grid-cols-[0fr,1fr,0fr] items-center bg-base-300 gap-4 relative h-12 dborder-b border-neutral-content">
     <h1 class="text-xl font-bold ms-4">GEOS</h1>
     
     <div role="tablist" use:horizontalScroll class="tabs tabs-lifted grow justify-start self-stretch w-full overflow-y-hidden overflow-x-auto scrollbar-thin">
@@ -120,7 +141,7 @@ use:shortcut={{
         </nav>
     </div>
 </header>
-<main>
+<main class="overflow-hidden">
 {@render children()}
 </main>
 </div>
