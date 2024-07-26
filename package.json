@@ -31,6 +31,7 @@
     "@types/wu": "^2.1.44",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.12.10",
+    "fast-xml-parser": "^4.4.0",
     "monaco-editor": "^0.50.0",
     "postcss": "^8.4.39",
     "rete-area-plugin": "^2.0.4",
