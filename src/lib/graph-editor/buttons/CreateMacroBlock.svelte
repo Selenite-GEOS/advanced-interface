@@ -1,13 +1,19 @@
 <script lang="ts">
   import { faCube, faCubes, faCubesStacked, faPlus } from "@fortawesome/free-solid-svg-icons";
   import EditorButton from "../EditorButton.svelte";
-  import { type NodeFactory, notifications } from "@selenite/graph-editor";
+  import { Modal, type NodeFactory, notifications } from "@selenite/graph-editor";
   import Fa, { FaLayers } from "svelte-fa";
+  import UpdateGraphModal from "../data/UpdateGraphModal.svelte";
 
 
     function createMacroBlock(factory: NodeFactory) {
-        notifications.warn({
-            message:"Create macro block not yet implemented."
+        Modal.instance.show({
+            component: UpdateGraphModal,
+            props: {},
+            buttons: ['cancel'],
+            get title() {
+                return `Update macro block ${factory.editor.graphName}`;
+            }
         })
     }
 </script>

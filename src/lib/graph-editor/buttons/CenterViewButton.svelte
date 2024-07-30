@@ -4,5 +4,6 @@
 </script>
 
 <EditorButton label="Center View" icon={faArrowsToEye} class="" activeFactoryAction={(factory) => {
-    factory.centerView();
+  const nodes = factory.selector.nodes;
+    factory.centerView(nodes.length > 0 ? nodes : undefined);
 }}/>
