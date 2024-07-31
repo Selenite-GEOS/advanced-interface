@@ -132,12 +132,12 @@ use:shortcut={{
         {/each}
         <button class="tab hover btn-ghost" onclick={(e) => tabs.defaultAddCallback()} ><Fa icon={faPlus}/></button>
     </div>
-    <div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center">
-        <Fa icon={faEllipsisH} size="2x" class="group-hover:opacity-0 transition-all  h-full" />
-        <nav class="bg-base-300 flex gap-2 pointer-events-none group-hover:pointer-events-auto absolute top-0 right-0 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-all">
-            <a href="/graph-editor">Graph Editor</a>
-            <a href="/graph-viewer">Graph Viewer</a>
-            <ThemeSelector />
+    <div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center z-10 ">
+        <Fa icon={faEllipsisH} class="group-hover:opacity-0 transition-all  h-full text-4xl" />
+        <nav class="h-full bg-base-300 pe-2 flex items-center gap-2 pointer-events-none group-hover:pointer-events-auto translate-x-20 group-hover:translate-x-0 group-focus-within:translate-x-0 absolute top-0 right-0 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-all">
+            <!-- <a href="/graph-editor" class="text-nowrap">Graph Editor</a> -->
+            <!-- <a href="/graph-viewer" class="text-nowrap">Graph Viewer</a> -->
+            <ThemeSelector class="select-sm"/>
         </nav>
     </div>
 </header>

@@ -7,6 +7,7 @@
   import EditorOverlay from "./graph-editor/EditorOverlay.svelte";
   import GraphBrowser from "./GraphBrowser.svelte";
   import CodeEditorIntegration from "./graph-editor/code-editor-integration/CodeEditorIntegration.svelte";
+  import GraphEditorShortcuts from "./graph-editor/GraphEditorShortcuts.svelte";
   const tabs = getContext("tabs");
   tabs.defaultAddCallback = addEditor;
 
@@ -89,6 +90,7 @@
 </script>
 
 <div class="h-full w-full grid grid-cols-[0fr,1fr,0fr]">
+  <GraphEditorShortcuts />
   <!-- Left side bar -->
   <aside class="h-full bg-base-200">
     <GraphBrowser />

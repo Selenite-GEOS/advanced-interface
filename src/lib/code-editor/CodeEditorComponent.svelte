@@ -2,7 +2,7 @@
   import { fade, slide } from "svelte/transition";
   import { makeCodeEditor } from "./CodeEditor.svelte";
   import { getContext, persisted } from "$lib/global";
-  import { themeControl } from "@selenite/graph-editor";
+  import { contextMenu, themeControl } from "@selenite/graph-editor";
 
   type Props = {
     width?: string;
@@ -37,9 +37,20 @@
         })
       : undefined
   );
-  export const codeEditorAction = $derived(res?.codeEditorAction);
-  export const codeEditor = $derived(res?.codeEditor);
-  export const codeEditorPromise = $derived(res?.codeEditorPromise);
+
+
+
+  const codeEditorAction = $derived(res?.codeEditorAction);
+  const codeEditor = $derived(res?.codeEditor);
+  const codeEditorPromise = $derived(res?.codeEditorPromise);
+  
+  export function getCodeEditorContext() {
+    return {
+      get codeEditorPromise() {
+        return codeEditorPromise;
+      },
+    }
+  }
 
   $effect(() => {
     if (!codeEditor) return;
