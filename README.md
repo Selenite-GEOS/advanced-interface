@@ -1,5 +1,5 @@
 # Selenite GEOS Graph Editor
-A graphical interface for advanced GEOS users. It serves the purpose of automating and simplifying the generation of GEOS input files.
+A graphical interface for advanced GEOS users. It serves the purpose of automating and simplifying the generation of GEOS input files, by programming visually with a node based interface.
 
 It is part of Selenite, a project to develop a suite of tools for using [GEOS](https://github.com/GEOS-DEV/GEOS).
 
@@ -15,7 +15,7 @@ The app is built using [Svelte](https://svelte.dev/) and [Tauri](https://v2.taur
 - [Rust](https://www.rust-lang.org/)
 
 ## Release
-A new release can be published by merging a pull request into the `release` branch.
+A new release can be made by merging a pull request into the `release` branch.
 
 The app will then be compiled and published to github, thanks to github actions.
 
