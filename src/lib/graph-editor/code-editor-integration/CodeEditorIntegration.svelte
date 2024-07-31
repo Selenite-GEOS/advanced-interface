@@ -33,13 +33,14 @@
   import { getContext } from "$lib/global";
   import CodeEditorIntegrationButton from "./CodeEditorIntegrationButton.svelte";
   import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+  import { fade } from "svelte/transition";
   // import type { XmlAttributeDefinition } from "@sel";
   const editorContext = getContext('editor');
   const geosContext = getContext('geos')
 
   const geosSchema = $derived(geosContext.schema)
   let codeEditorCmpnt = $state<CodeEditorComponent>();
-  const codeEditorPromise = $derived(codeEditorCmpnt?.codeEditorPromise);
+  const codeEditorPromise = $derived(codeEditorCmpnt?.getCodeEditorContext().codeEditorPromise);
   const cursorTag = "cursorPositioooon";
   
   /**
@@ -487,7 +488,8 @@
 
 {#await codeEditorPromise then}
   <div
-    class="absolute bottom-0 top-0 -translate-x-1/2 z-10 nope-pt-[2.64rem] pointer-events-none overflow-clip"
+    transition:fade={{ duration: 200 }}
+    class="absolute bottom-0 top-0 -translate-x-1/2 z-[5] nope-pt-[2.64rem] pointer-events-none overflow-clip"
   >
     <div class="h-full flex flex-col gap-2 justify-center pointer-events-none">
       <CodeEditorIntegrationButton

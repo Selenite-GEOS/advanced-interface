@@ -24,7 +24,7 @@
     class: classes,
   }: Props = $props();
 
-  const geosContext = getContext('geos');
+  const geosContext = getContext("geos");
   $effect(() => {
     if (!container || !geosContext.schema) return;
     setup();
@@ -39,11 +39,28 @@
     const schema = geosContext.schema;
     if (!schema) {
       throw new Error("Missing schema for editor setup.");
-    };
+    }
     const res = await setupFullGraphEditor({
       container,
       additionalNodeItems: [
-        ...xmlNodeItems({schema, basePath: ['GEOS']})
+        ...xmlNodeItems({
+          schema,
+          basePath: ["GEOS"],
+          priorities: {
+            Problem: {
+              Solvers: 10,
+              Mesh: 9,
+              Geometry: 8,
+              Events: 7,
+              ElementRegions: 6,
+              NumericalMethods: 5,
+              Constitutive: 4,
+              FieldSpecifications: 3,
+              Functions: 2,
+              Outputs: 1,
+            },
+          },
+        }),
       ],
       saveData,
       setups: [setupSvelteRender],
