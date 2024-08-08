@@ -8,7 +8,8 @@ on:
         'package.json',
         'tsconfig.json',
         'bun.lockb',
-        '.github/workflows/github-pages.yml'
+        '.github/workflows/github-pages.yml',
+        'svelte.config.js',
       ]
     branches:
       - main
