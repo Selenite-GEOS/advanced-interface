@@ -163,7 +163,7 @@
 				</a>
 			{/snippet}
 			{@render Link({href: "https://geosx-geosx.readthedocs-hosted.com/en/latest/", text:"GEOS Docs"})}
-			{@render Link({href:"https://selenite-geos.github.io/docs", text:"Docs"})}
+			{@render Link({href:"https://selenite-geos.github.io/docs/advanced-interface/introduction/", text:"Docs"})}
 			{@render Link({href:"https://selenite-geos.github.io/simplified-interface", text:"Simplified"})}
 				<!-- <a href="/graph-editor" class="text-nowrap">Graph Editor</a> -->
 				<!-- <a href="/graph-viewer" class="text-nowrap">Graph Viewer</a> -->
