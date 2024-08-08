@@ -3,10 +3,10 @@ import type { ICodeEditor } from '../../CodeEditor.svelte';
 // import formatXml from 'xml-formatter';
 import { conf, getGeosXmlCompletionItemProvider, language } from './geos_xml';
 import loader from '@monaco-editor/loader';
-import * as monaco from 'monaco-editor'
+import * as monaco from 'monaco-editor';
 import { formatXml, XmlSchema } from '@selenite/commons';
 import { ErrorWNotif } from '@selenite/graph-editor';
-import './monaco'
+import './monaco';
 export default class MonacoCodeEditor implements ICodeEditor {
 	private monaco: typeof Monaco;
 	private editor?: Monaco.editor.IStandaloneCodeEditor;
@@ -46,17 +46,15 @@ export default class MonacoCodeEditor implements ICodeEditor {
 					const complexType = geosSchema.typeMap.get(tag);
 					if (complexType) {
 						const baseUrl =
-              "https://geosx-geosx.readthedocs-hosted.com/en/latest/docs/sphinx/CompleteXMLSchema.html";
-			  const link = `${baseUrl}#element-${tag.toLowerCase()}`;
+							'https://geosx-geosx.readthedocs-hosted.com/en/latest/docs/sphinx/CompleteXMLSchema.html';
+						const link = `${baseUrl}#element-${tag.toLowerCase()}`;
 						return {
 							contents: [
 								{
 									supportHtml: true,
-									value: `<b><a href="${
-										link ?? 'missing link'
-									}"> ${tag}</a></b><br/><ul><li>${(complexType.childTypes ?? []).join(
-										'</li><li>'
-									)}</li></ul>
+									value: `<b><a href="${link ?? 'missing link'}"> ${tag}</a></b><br/><ul><li>${(
+										complexType.childTypes ?? []
+									).join('</li><li>')}</li></ul>
 						`
 								}
 							]
@@ -89,7 +87,7 @@ export default class MonacoCodeEditor implements ICodeEditor {
 								const attr = complexType.attributes.get(hoveredWord.word);
 								if (attr) {
 									const requiredOrDefault = attr.required ? '<small> required</small>' : '';
-									
+
 									return {
 										contents: [
 											{
@@ -162,7 +160,7 @@ export default class MonacoCodeEditor implements ICodeEditor {
 	}
 
 	public static async create({ geosSchema }: { geosSchema: XmlSchema }) {
-		loader.config({monaco})
+		loader.config({ monaco });
 		const monacoInstance = await loader.init();
 		// const monaco = (await import('./monaco')).default;
 		return new MonacoCodeEditor({ monaco: monacoInstance, geosSchema });

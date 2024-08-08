@@ -1,2 +1,2 @@
-export * from './global'
-export * from './tabs.svelte'
+export * from './global';
+export * from './tabs.svelte';

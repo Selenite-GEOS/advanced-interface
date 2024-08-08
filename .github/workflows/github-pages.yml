@@ -9,7 +9,7 @@ on:
         'tsconfig.json',
         'bun.lockb',
         '.github/workflows/github-pages.yml',
-        'svelte.config.js',
+        'svelte.config.js'
       ]
     branches:
       - main
@@ -46,4 +46,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-    
