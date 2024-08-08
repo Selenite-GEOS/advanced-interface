@@ -16,7 +16,7 @@
 		Modal
 	} from '@selenite/graph-editor';
 	import '../app.css';
-	import { faEllipsisH, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+	import { faEllipsisH, faPlus, faTimes, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import ThemeSelector from '$lib/ThemeSelector.svelte';
 	import { flip } from 'svelte/animate';
@@ -63,6 +63,8 @@
 {#snippet RenameTabModal(tab: Tab)}
 	<input bind:value={tab.label} class="input input-bordered text-base-content" />
 {/snippet}
+
+
 
 <div
 	class="grid grid-rows-[0fr,1fr] h-screen w-screen overflow-clip"
@@ -150,8 +152,19 @@
 		<div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center z-10">
 			<Fa icon={faEllipsisH} class="group-hover:opacity-0 transition-all  h-full text-4xl w-8" />
 			<nav
-				class="h-full bg-base-300 pe-2 flex items-center gap-2 pointer-events-none group-hover:pointer-events-auto translate-x-20 group-hover:translate-x-0 group-focus-within:translate-x-0 absolute top-0 right-0 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-all"
+				class="h-full bg-base-300 pe-2 flex items-center gap-4 pointer-events-none group-hover:pointer-events-auto translate-x-20 group-hover:translate-x-0 group-focus-within:translate-x-0 absolute top-0 right-0 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-all"
 			>
+			{#snippet Link({ href, text}: { href: string, text: string})}
+				<a {href} class="text-nowrap link-hover flex items-center gap-2">
+					{text} 
+					{#if href.includes('http')}
+						<Fa icon={faExternalLinkAlt} />
+					{/if}
+				</a>
+			{/snippet}
+			{@render Link({href: "https://geosx-geosx.readthedocs-hosted.com/en/latest/", text:"GEOS Docs"})}
+			{@render Link({href:"https://selenite-geos.github.io/docs", text:"Docs"})}
+			{@render Link({href:"https://selenite-geos.github.io/simplified-interface", text:"Simplified"})}
 				<!-- <a href="/graph-editor" class="text-nowrap">Graph Editor</a> -->
 				<!-- <a href="/graph-viewer" class="text-nowrap">Graph Viewer</a> -->
 				<ThemeSelector class="select-sm" />
