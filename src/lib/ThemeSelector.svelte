@@ -2,7 +2,6 @@
   import { capitalize, shortcut } from "@selenite/commons";
   import { themeControl } from "@selenite/graph-editor";
   import type { HTMLSelectAttributes } from "svelte/elements";
-
   let {...props}: HTMLSelectAttributes = $props();
 </script>
 
