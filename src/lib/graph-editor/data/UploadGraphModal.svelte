@@ -179,7 +179,7 @@
 					const inputProp: MacroBlockInputPropInput = {
 						...outputProp,
 						bearer: 'node',
-						default: JSON.stringify(node.getData(key, inputVals) ?? socket.isArray ? [] : ''),
+						default: JSON.stringify((node.getData(key, inputVals) ?? socket.isArray) ? [] : ''),
 						props: JSON.stringify({})
 					};
 					inputProps.push(inputProp);

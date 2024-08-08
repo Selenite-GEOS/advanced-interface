@@ -23,7 +23,7 @@ export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema
 	const postSetupEditorPromise = new Promise<ICodeEditor>((resolve) => {
 		resolvePostSetupEditorPromise = resolve;
 	});
-	let codeEditor =$state<ICodeEditor>();
+	let codeEditor = $state<ICodeEditor>();
 	return {
 		get codeEditor() {
 			return codeEditor;

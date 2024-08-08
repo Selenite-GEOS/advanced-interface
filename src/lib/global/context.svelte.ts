@@ -1,35 +1,34 @@
-import type { Tabs } from "$lib/tabs.svelte"
-import { XmlSchema } from "@selenite/commons"
-import type { NodeFactory } from "@selenite/graph-editor"
-import { getContext as baseGetContext, setContext as baseSetContext} from "svelte"
-
+import type { Tabs } from '$lib/tabs.svelte';
+import { XmlSchema } from '@selenite/commons';
+import type { NodeFactory } from '@selenite/graph-editor';
+import { getContext as baseGetContext, setContext as baseSetContext } from 'svelte';
 
 export class GeosContext {
-    schema = $state<XmlSchema>()
+	schema = $state<XmlSchema>();
 }
 
 /**
  * Available contexts through the context api.
  */
 export type Contexts = {
-    tabs: Tabs,
-    saves: Set<() => void>
-    /** Save function to save everything. */
-    save: () => void
+	tabs: Tabs;
+	saves: Set<() => void>;
+	/** Save function to save everything. */
+	save: () => void;
 
-    /** Editor context */
-    editor: {
-        factories: NodeFactory[]
-        activeFactory?: NodeFactory
-        displayCodeEditor: boolean
-    }
-    geos: GeosContext
-}
+	/** Editor context */
+	editor: {
+		factories: NodeFactory[];
+		activeFactory?: NodeFactory;
+		displayCodeEditor: boolean;
+	};
+	geos: GeosContext;
+};
 
 /** Retrieves the context that belongs to the closest parent component
  *  with the specified key. Must be called during component initialisation. */
 export function getContext<T extends keyof Contexts>(key: T): Contexts[T] {
-    return baseGetContext(key)
+	return baseGetContext(key);
 }
 
 /**
@@ -40,5 +39,5 @@ export function getContext<T extends keyof Contexts>(key: T): Contexts[T] {
  * Like lifecycle functions, this must be called during component initialisation.
  */
 export function setContext<T extends keyof Contexts>(key: T, value: Contexts[T]): void {
-    baseSetContext(key, value)
+	baseSetContext(key, value);
 }

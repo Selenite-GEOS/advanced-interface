@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import { onMount, tick } from 'svelte';
 	import type { Writable } from 'svelte/store';
 	import { flip } from 'svelte/animate';
@@ -7,9 +6,9 @@
 	import Fa from 'svelte-fa';
 	import { faXmark } from '@fortawesome/free-solid-svg-icons';
 	import { debounce } from 'lodash-es';
-  import { newLocalId } from '@selenite/commons';
-  import type { NodeEditor } from '@selenite/graph-editor';
-  import { persisted } from '$lib/global';
+	import { newLocalId } from '@selenite/commons';
+	import type { NodeEditor } from '@selenite/graph-editor';
+	import { persisted } from '$lib/global';
 
 	const localId = newLocalId();
 	export let formElement: HTMLFormElement | undefined = undefined;
