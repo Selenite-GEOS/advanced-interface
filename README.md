@@ -4,7 +4,9 @@ A graphical interface for advanced GEOS users. It serves the purpose of automati
 It is part of Selenite, a project to develop a suite of tools for using [GEOS](https://github.com/GEOS-DEV/GEOS).
 
 ## Usage
-The app is available as a standalone executable for Windows, MacOS and Linux. You can download the latest release from the [releases page](https://github.com/ShaitanLyss/selenite-geos-graph-editor/releases).
+The app can be accessed at this url : [https://selenite-geos.github.io/advanced-interface](https://selenite-geos.github.io/advanced-interface/).
+
+The app is also available as a standalone executable for Windows, MacOS and Linux. You can download the latest release from the [releases page](https://github.com/ShaitanLyss/selenite-geos-graph-editor/releases).
 
 ## Development
 The app is built using [Svelte](https://svelte.dev/) and [Tauri](https://v2.tauri.app/fr/). Svelte provides a reactive web frontend, while Tauri provides a way to package the app as a standalone executable.
