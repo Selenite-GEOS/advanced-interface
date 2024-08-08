@@ -23,7 +23,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@monaco-editor/loader": "^1.4.0",
     "@selenite/graph-editor": "^0.0.83",
-    "@sveltejs/adapter-static": "^3.0.1",
+    "@sveltejs/adapter-static": "^3.0.2",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0-next.4",
     "@tauri-apps/cli": ">=2.0.0-beta.0",
