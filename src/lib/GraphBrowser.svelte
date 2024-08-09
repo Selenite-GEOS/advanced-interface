@@ -56,7 +56,7 @@
 				<input type="search" class="w-full" placeholder="Search" />
 				<Fa icon={faSearch} class="hidden opacity-80 sm:block" />
 			</label>
-			<h2 class="font-bold text-xl mb-2 px-2">Macro Blocks ({NodeStorage.numGraphs})</h2>
+			<h2 class="font-bold text-xl mb-2 px-2 text-nowrap">Macro Blocks ({NodeStorage.numGraphs})</h2>
 			<div class="mb-2 grow relative">
 				<div class="absolute inset-0 max-h-full flex justify-center">
 					<section
