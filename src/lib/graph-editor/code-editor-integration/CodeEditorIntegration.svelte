@@ -2,9 +2,9 @@
 	import { CodeEditorComponent } from '$lib/code-editor';
 	import { ErrorWNotif, Nodes, notifications, XmlNode } from '@selenite/graph-editor';
 	// import { ErrorWNotif, getContext, _ } from '$lib/global';
-
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
+	import { _ } from '$lib/global'
 	import { structures } from 'rete-structures';
 	import {
 		parseXml,
@@ -43,50 +43,21 @@
 	/**
 	 * Pulls the selected nodes from the graph editor to the code editor
 	 */
-	async function pull() {
+	async function toCodeEditor() {
 		if (!codeEditorPromise) return;
 		const codeEditor = await codeEditorPromise;
 		const factory = editorContext.activeFactory;
-
 		if (!factory) throw new ErrorWNotif('No active editor');
 		const editor = factory.getEditor();
-		if (!factory?.selector) throw new ErrorWNotif('No selector');
 		if (!geosSchema) throw new ErrorWNotif('No geos schema');
-		const selectedXmlNodes = wu(factory.selector.entities.values())
-			.map((selected) => editor.getNode(selected.id))
-			.filter((node) => node instanceof XmlNode)
-			.reduce<Set<XmlNode>>((acc, node) => acc.add(node as XmlNode), new Set());
 
 		const { text, cursorOffset } = codeEditor.getText();
-		let preppedText = text;
+		// let preppedText = text;
 		// if (cursorOffset !== null)
 		// 	preppedText = text.slice(0, cursorOffset) + `<${cursorTag}/>` + text.slice(cursorOffset);
+		const res = await factory.codeIntegration.toCode({schema: geosSchema, text});
 
-		const baseXml = parseXml(preppedText);
-		let res: ParsedXmlNodes = baseXml;
-
-		const xmlMergingPromises = wu(factory.selector.entities.values())
-			.map((selected) => editor.getNode(selected.id))
-			.filter((node) => node instanceof XmlNode)
-			// Take only the selected nodes that are not predecessors
-			// of other selected nodes because they are redundant
-			.filter((node) =>
-				wu(structures(editor).successors(node!.id).nodes().values())
-					.filter((node) => node instanceof XmlNode)
-					.every((node) => !selectedXmlNodes.has(node as XmlNode))
-			)
-			.map(async (node) => {
-				const xml = parseXml(await (node as XmlNode).getXml());
-				res = mergeParsedXml({
-					baseXml: res,
-					newXml: xml,
-					cursorTag,
-					typesPaths: geosSchema.typePaths
-				});
-			});
-		await Promise.all(xmlMergingPromises);
-
-		codeEditor.setText({ text: buildXml({ parsedXml: res, cursorTag }) });
+		codeEditor.setText({ text: res });
 	}
 	/**
 	 * Pushes the selected text from the code editor to the graph editor
@@ -444,7 +415,7 @@
 	>
 		<div class="h-full flex flex-col gap-2 justify-center pointer-events-none">
 			<CodeEditorIntegrationButton icon={faArrowRight} flip={'horizontal'} on:click={push} />
-			<CodeEditorIntegrationButton icon={faArrowRight} on:click={pull} />
+			<CodeEditorIntegrationButton icon={faArrowRight} on:click={toCodeEditor} />
 			<CodeEditorIntegrationButton icon={faArrowDown} on:click={download} />
 		</div>
 	</div>

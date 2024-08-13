@@ -4,11 +4,14 @@
 	import {
 		type NodeEditor,
 		NodeFactory,
+		type NodeMenuItem,
+		nodeRegistry,
 		setupFullGraphEditor,
 		setupSvelteRender,
 		themeControl,
 		xmlNodeItems
 	} from '@selenite/graph-editor';
+	import { untrack } from 'svelte';
 	let container = $state<HTMLElement>();
 
 	type Props = {
@@ -22,7 +25,9 @@
 	const geosContext = getContext('geos');
 	$effect(() => {
 		if (!container || !geosContext.schema) return;
-		setup();
+		untrack(() => {
+			setup();
+		})
 
 		return () => {
 			factory?.destroyArea();
