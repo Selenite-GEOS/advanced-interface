@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { CodeEditorComponent } from '$lib/code-editor';
-	import { ErrorWNotif, Nodes, notifications, XmlNode } from '@selenite/graph-editor';
+	import { ErrorWNotif, notifications, XMLData, XmlNode } from '@selenite/graph-editor';
 	// import { ErrorWNotif, getContext, _ } from '$lib/global';
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
-	import { _ } from '$lib/global'
-	import { structures } from 'rete-structures';
+	import { _, persisted } from '$lib/global';
 	import {
 		parseXml,
 		type ParsedXmlNodes,
-		mergeParsedXml,
-		buildXml,
 		formatXml,
 		getElementFromParsedXml,
 		getXmlAttributes
@@ -30,7 +27,10 @@
 	import { getContext } from '$lib/global';
 	import CodeEditorIntegrationButton from './CodeEditorIntegrationButton.svelte';
 	import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-	import { fade } from 'svelte/transition';
+	import { fade, slide } from 'svelte/transition';
+	import CodeEditorButton from '../buttons/CodeEditorButton.svelte';
+	import type { Model } from '$lib/code-editor/CodeEditor.svelte';
+	import { untrack } from 'svelte';
 	// import type { XmlAttributeDefinition } from "@sel";
 	const editorContext = getContext('editor');
 	const geosContext = getContext('geos');
@@ -38,6 +38,7 @@
 	const geosSchema = $derived(geosContext.schema);
 	let codeEditorCmpnt = $state<CodeEditorComponent>();
 	const codeEditorPromise = $derived(codeEditorCmpnt?.getCodeEditorContext().codeEditorPromise);
+	const codeEditor = $derived(codeEditorCmpnt?.getCodeEditorContext().codeEditor);
 	const cursorTag = 'cursorPositioooon';
 
 	/**
@@ -48,14 +49,13 @@
 		const codeEditor = await codeEditorPromise;
 		const factory = editorContext.activeFactory;
 		if (!factory) throw new ErrorWNotif('No active editor');
-		const editor = factory.getEditor();
 		if (!geosSchema) throw new ErrorWNotif('No geos schema');
 
 		const { text, cursorOffset } = codeEditor.getText();
 		// let preppedText = text;
 		// if (cursorOffset !== null)
 		// 	preppedText = text.slice(0, cursorOffset) + `<${cursorTag}/>` + text.slice(cursorOffset);
-		const res = await factory.codeIntegration.toCode({schema: geosSchema, text});
+		const res = await factory.codeIntegration.toCode({ schema: geosSchema, text });
 
 		codeEditor.setText({ text: res });
 	}
@@ -406,9 +406,80 @@
 				message: $_('code-editor-integration.button.download.notification.nothing-selected.message')
 			});
 	}
+
+	class LivePreview {
+		persistedActive = persisted('livePreview', false);
+		#active = $state(get(this.persistedActive));
+		model = $derived(codeEditor?.createModel({language: 'geos_xml', value: ''}));
+		valid = $state(false);
+
+ 		get active() {
+			return this.#active;
+		}
+		set active(b: boolean) {
+			this.persistedActive.set(b);
+			this.#active = b;
+
+			this.updateLivePreview()
+		}
+		constructor() {
+			$effect(() => {
+				if (!codeEditor) return;
+				untrack(() => {
+				this.updateLivePreview()
+				})
+			})
+			$effect(() => {
+				if (!this.active) return;
+				untrack(() => {
+					this.valid = false;
+				})
+				if (!this.model) return;
+				const factory =  editorContext.activeFactory
+				if (!factory) {
+					this.model.setValue("No active graph editor.");
+					return;
+				};
+				if (factory.previewedNodes.size === 0) {
+					this.model.setValue("Please mark at least one GEOS node for live\npreview.\nYou can do so with a right click on a node.")
+					return;
+				}
+				const previewedNode = factory.previewedNodes.values().next().value as Node;
+				const data = factory.dataflowCache.get(previewedNode);
+				if (!data) {
+					this.model.setValue("Missing data for previewed node.");
+					return;
+				}
+				const xmlData = Object.entries(data).filter(([k,v]) => v instanceof XMLData) as [string, XMLData][];
+				if (xmlData.length === 0) {
+					this.model.setValue("No GEOS or XML data found for previewed node.");
+					return;
+				}
+				const res: string[] = [];
+				res.push(`<!-- Live preview: ${previewedNode.name ?? previewedNode.label} -->`);
+				// res.push('<!-- ')
+				for (const [k,v] of xmlData) {
+					if (xmlData.length > 1) res.push(`<!-- ${previewedNode.outputs[k].label} -->`);
+					res.push(v.toXml());
+				}
+				this.model.setValue(formatXml({xml: res.join("\n")}));
+				untrack(() => {
+					this.valid = true;
+				})
+			})
+		}
+		
+		updateLivePreview() {
+			if (!codeEditor) return;
+			codeEditor.activeModel = this.active ? this.model : codeEditorCmpnt?.getModel();	
+			codeEditor.readonly = this.active;
+		}
+	}
+	const livePreview = new LivePreview();
 </script>
 
 {#await codeEditorPromise then}
+{#if !livePreview.active}
 	<div
 		transition:fade={{ duration: 200 }}
 		class="absolute bottom-0 top-0 -translate-x-1/2 z-[5] nope-pt-[2.64rem] pointer-events-none overflow-clip"
@@ -419,9 +490,24 @@
 			<CodeEditorIntegrationButton icon={faArrowDown} on:click={download} />
 		</div>
 	</div>
+	{/if}
 {/await}
-<CodeEditorComponent
-	bind:this={codeEditorCmpnt}
-	width="40vw"
-	border="border-s-2 border-base-300 dborder-base-content dborder-opacity-20 "
-/>
+<section
+	transition:slide={{ axis: 'x', duration: 200 }}
+	class="relative grid grid-rows-[0fr,1fr] h-full w-[40vw] overflow-clip border-s-2 border-base-300 dborder-base-content dborder-opacity-20"
+>
+	<CodeEditorComponent bind:this={codeEditorCmpnt} width="w-[40vw]" downloadAvailable={!livePreview.active || livePreview.valid}>
+		{#snippet additionalButtons()}
+			<label class="label cursor-pointer gap-2 justify-self-end pe-2">
+				<input
+					type="checkbox"
+					class="toggle toggle-sm transition-all enabled:toggle-accent"
+					disabled={!codeEditor}
+					bind:checked={livePreview.active}
+				/>
+				<span class="label-text text-nowrap">Live preview</span>
+			</label>
+		{/snippet}
+	</CodeEditorComponent>
+	<h1 class="select-none opacity-50 font-bold text-xl text-right text-nowrap truncate  pe-4 pb-2" title="Code Editor">Code Editor</h1>
+</section>
