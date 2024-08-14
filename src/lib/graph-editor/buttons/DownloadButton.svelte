@@ -5,6 +5,8 @@
 
 <EditorButton
 	label="Download"
+	description="Download the graph as a JSON file."
+	shortcut="d"
 	icon={faDownload}
 	class=""
 	activeFactoryAction={(factory) => {

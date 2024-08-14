@@ -7,6 +7,7 @@ import * as monaco from 'monaco-editor';
 import { formatXml, XmlSchema } from '@selenite/commons';
 import { ErrorWNotif } from '@selenite/graph-editor';
 import './monaco';
+import { KeyCode, KeyMod } from 'monaco-editor/esm/vs/editor/editor.api';
 export default class MonacoCodeEditor implements ICodeEditor {
 	private monaco: typeof Monaco;
 	private editor?: Monaco.editor.IStandaloneCodeEditor;
@@ -164,6 +165,23 @@ export default class MonacoCodeEditor implements ICodeEditor {
 			dragAndDrop: true,
 			dropIntoEditor: { enabled: true }
 		});
+		this.editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyO, () => {
+			document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyO', key: 'o', ctrlKey: true }));
+		})
+		this.editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyD, () => {
+			document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyD', key: 'd', ctrlKey: true }))
+		})
+		this.editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyC, () => {
+			document.dispatchEvent(
+				new KeyboardEvent('keydown', { code: 'KeyC', key: 'c', ctrlKey: true })
+			);
+		});
+		this.editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyL, () => {
+			document.dispatchEvent(
+				new KeyboardEvent('keydown', { code: 'KeyL', key: 'l', ctrlKey: true })
+			);
+		});
+		// updateKeyBinding(editor, 'CommandPalette', KeyMod.CtrlCmd | KeyCode.KEY_P);
 	}
 
 	public destroy() {

@@ -5,6 +5,8 @@
 
 <EditorButton
 	label="Load"
+	description="Open a graph."
+	shortcut="o"
 	icon={faFile}
 	class=""
 	activeFactoryAction={(factory) => {

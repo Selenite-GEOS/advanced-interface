@@ -16,7 +16,7 @@ export interface ICodeEditor {
 
 export type codeEditorBackends = 'monaco';
 
-export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema: XmlSchema }): {
+export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema: XmlSchema}): {
 	codeEditor: ICodeEditor | undefined;
 	codeEditorPromise: Promise<ICodeEditor>;
 	codeEditorAction: Action<HTMLDivElement>;

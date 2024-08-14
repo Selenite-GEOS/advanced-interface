@@ -13,10 +13,13 @@
 
 <SmallEditorButton
 	label="Undo"
+	shortcut="ctrl+z"
 	icon={faRotateLeft}
 	class="hover:btn-warning  text-warning {$canUndo ? '' : '!bg-transparent'}"
 	disabled={!$canUndo}
 	activeFactoryAction={(factory) => {
-		factory?.history?.undo();
+		factory.bulkOperation(() => {
+			factory?.history?.undo();
+		})
 	}}
 />

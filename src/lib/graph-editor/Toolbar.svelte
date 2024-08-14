@@ -37,7 +37,7 @@
 	};
 </script>
 
-<div use:gridBreakpoints {...props} class="items-center gap-2 {props.class}">
+<div {...props} class="flex flex-wrap items-center gap-2 {props.class}">
 	{#if children}
 		{@render children()}
 	{/if}

@@ -10,6 +10,7 @@
 	import { fade, slide } from 'svelte/transition';
 	import { persisted } from './global';
 	import { NodeStorage } from '@selenite/graph-editor';
+	import { shortcut } from '@selenite/commons';
 
 	// TODO: Remove
 	let saved = persisted<string | null>('selected-browser', null);
@@ -31,9 +32,16 @@
 
 <div class="h-full grid grid-flow-col">
 	<menu class=" join flex flex-col rounded-none dborder-r border-neutral-content">
-		{#snippet SideButton(id: string, label: string, icon: IconDefinition)}
+		{#snippet SideButton(id: string, label: string, icon: IconDefinition, key: string)}
 			<button
 				class="join-item btn rounded-none h-[5rem] w-[5rem] shadow-none"
+				use:shortcut={{
+					shift: true,
+					key,
+					action: (node, e) => {
+						onclick(id);
+					}
+				}}
 				class:btn-primary={selected === id}
 				onclick={() => onclick(id)}
 			>
@@ -43,9 +51,9 @@
 				</div>
 			</button>
 		{/snippet}
-		{@render SideButton('favorite', 'Favorite', faStar)}
-		{@render SideButton('user', 'User', faUser)}
-		{@render SideButton('shared', 'Shared', faGlobe)}
+		{@render SideButton('favorite', 'Favorite', faStar, 'f')}
+		{@render SideButton('user', 'User', faUser, 'u')}
+		{@render SideButton('shared', 'Shared', faGlobe, 's')}
 	</menu>
 	{#if selected}
 		<section
@@ -56,7 +64,7 @@
 				<input type="search" class="w-full" placeholder="Search" />
 				<Fa icon={faSearch} class="hidden opacity-80 sm:block" />
 			</label>
-			<h2 class="font-bold text-xl mb-2 px-2 text-nowrap">Macro Blocks ({NodeStorage.numGraphs})</h2>
+			<h2 class="font-bold text-xl mb-2 px-2 text-nowrap truncate">Macro Blocks ({NodeStorage.numGraphs})</h2>
 			<div class="mb-2 grow relative">
 				<div class="absolute inset-0 max-h-full flex justify-center">
 					<section

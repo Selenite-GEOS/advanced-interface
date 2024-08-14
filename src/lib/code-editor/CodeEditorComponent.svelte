@@ -4,7 +4,13 @@
 	import { getContext, persisted } from '$lib/global';
 	import { contextMenu, themeControl } from '@selenite/graph-editor';
 	import { untrack, type Snippet } from 'svelte';
-	import { download, horizontalScroll } from '@selenite/commons';
+	import {
+		download,
+		horizontalScroll,
+		shortcut,
+		shortcutToString,
+		type KeyboardShortcut
+	} from '@selenite/commons';
 
 	type Props = {
 		width?: string;
@@ -12,8 +18,14 @@
 		additionalButtons?: Snippet;
 		/** Whether download is available. Defaults to true. */
 		downloadAvailable?: boolean;
+		textToDownload?: string;
 	};
-	let { width = 'w-full', additionalButtons, downloadAvailable = true }: Props = $props();
+	let {
+		width = 'w-full',
+		additionalButtons,
+		downloadAvailable = true,
+		textToDownload
+	}: Props = $props();
 	const text = persisted('codeEditorText', '<?xml version="1.0"?>\n\n<Problem>\n  \n</Problem>');
 
 	function saveCodeEditor() {
@@ -34,7 +46,8 @@
 		geosSchema
 			? makeCodeEditor({
 					backend: 'monaco',
-					geosSchema
+					geosSchema,
+					openFile
 				})
 			: undefined
 	);
@@ -81,7 +94,7 @@
 		if (codeEditor) codeEditor.setLightTheme(themeControl.isLight);
 	});
 
-	function openFile(e: Event) {
+	function openFile() {
 		const input = document.createElement('input');
 		input.type = 'file';
 		input.accept = '.xml';
@@ -96,13 +109,28 @@
 	}
 
 	function saveFile(e: Event) {
-		download(filenameWithXmlExtension, codeEditor?.getText().text);
+		download(filenameWithXmlExtension, textToDownload ?? codeEditor?.getText().text);
 	}
 
 	const filename = persisted('codeEditorFilename', 'problem');
 	const filenameWithXmlExtension = $derived(
 		$filename.endsWith('.xml') ? $filename : `${$filename}.xml`
 	);
+
+	$effect(() => {
+		function isShortcutTriggered(e: KeyboardEvent, shortcut: KeyboardShortcut) {
+			return (
+				(shortcut.key === undefined ? true : e.key.toLowerCase() === shortcut.key.toLowerCase()) &&
+				e.ctrlKey === !!shortcut.ctrl &&
+				e.altKey === !!shortcut.alt &&
+				e.shiftKey === !!shortcut.shift
+			);
+		}
+		document.addEventListener('keydown', (e) => {
+			if (isShortcutTriggered(e, { key: 'd', ctrl: true }))
+				console.log(e, e.target instanceof HTMLElement);
+		});
+	});
 </script>
 
 <nav
@@ -113,17 +141,29 @@
 		label,
 		onclick,
 		needWritable,
-		disabled
+		disabled,
+		descr,
+		shortcut: shortcutDef
 	}: {
 		label?: string;
 		onclick?: EventListener;
 		needWritable?: boolean;
 		disabled?: boolean;
+		descr?: string;
+		shortcut?: KeyboardShortcut;
 	})}
 		{@const unavailable = needWritable && codeEditor?.readonly}
 		<button
 			disabled={!codeEditor || disabled}
+			use:shortcut={{
+				...shortcutDef,
+				action(node, e) {
+					if (!codeEditor || disabled || unavailable)	return;
+					onclick?.(e);
+				}
+			}}
 			class:opacity-0={unavailable}
+			title={`${descr}${shortcutDef ? `\n(${shortcutToString(shortcutDef)})` : ''}`}
 			class:pointer-events-none={unavailable}
 			class="text-sm btn btn-ghost btn-sm h-full rounded-none no-animation transition-all"
 			{onclick}
@@ -132,9 +172,27 @@
 		</button>
 	{/snippet}
 	<div class="flex items-center">
-		{@render CodeEditorButton({ label: 'Open', onclick: openFile, needWritable: true })}
-		{@render CodeEditorButton({ label: 'Download', onclick: saveFile, disabled: !downloadAvailable})}
-		{@render CodeEditorButton({ label: 'Clear', onclick: clear, needWritable: true })}
+		{@render CodeEditorButton({
+			label: 'Open',
+			onclick: openFile,
+			needWritable: true,
+			descr: 'Open an XML file.',
+			shortcut: { key: 'o', ctrl: true }
+		})}
+		{@render CodeEditorButton({
+			label: 'Download',
+			onclick: saveFile,
+			disabled: !downloadAvailable,
+			descr: 'Download the XML file.',
+			shortcut: { key: 'd', ctrl: true }
+		})}
+		{@render CodeEditorButton({
+			label: 'Clear',
+			onclick: clear,
+			needWritable: true,
+			descr: 'Clear the editor.',
+			shortcut: { key: 'c', ctrl: true }
+		})}
 		<input
 			type="text"
 			class="input input-sm truncate w-[10rem] opacity-80 focus:opacity-100"
@@ -167,4 +225,3 @@
 		</div>
 	{/await}
 </div>
-

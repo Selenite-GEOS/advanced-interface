@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CodeEditorComponent } from '$lib/code-editor';
-	import { ErrorWNotif, notifications, XMLData, XmlNode } from '@selenite/graph-editor';
+	import { contextMenu, ErrorWNotif, notifications, XMLData, XmlNode } from '@selenite/graph-editor';
 	// import { ErrorWNotif, getContext, _ } from '$lib/global';
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
@@ -10,7 +10,10 @@
 		type ParsedXmlNodes,
 		formatXml,
 		getElementFromParsedXml,
-		getXmlAttributes
+		getXmlAttributes,
+
+		shortcut
+
 	} from '@selenite/commons';
 	import { AutoArrangePlugin, Presets as ArrangePresets } from 'rete-auto-arrange-plugin';
 	import {
@@ -410,68 +413,76 @@
 	class LivePreview {
 		persistedActive = persisted('livePreview', false);
 		#active = $state(get(this.persistedActive));
-		model = $derived(codeEditor?.createModel({language: 'geos_xml', value: ''}));
-		valid = $state(false);
+		model = $derived(codeEditor?.createModel({ language: 'geos_xml', value: '' }));
+		xml = $state<string>();
+		valid = $derived(this.xml !== undefined);
 
- 		get active() {
+		get active() {
 			return this.#active;
 		}
 		set active(b: boolean) {
 			this.persistedActive.set(b);
 			this.#active = b;
 
-			this.updateLivePreview()
+			this.updateLivePreview();
 		}
 		constructor() {
 			$effect(() => {
 				if (!codeEditor) return;
 				untrack(() => {
-				this.updateLivePreview()
-				})
-			})
+					this.updateLivePreview();
+				});
+			});
 			$effect(() => {
-				if (!this.active) return;
 				untrack(() => {
-					this.valid = false;
-				})
+					this.xml = undefined;
+				});
+				if (!this.active) return;
 				if (!this.model) return;
-				const factory =  editorContext.activeFactory
+				const factory = editorContext.activeFactory;
 				if (!factory) {
-					this.model.setValue("No active graph editor.");
+					this.model.setValue('No active graph editor.');
 					return;
-				};
+				}
 				if (factory.previewedNodes.size === 0) {
-					this.model.setValue("Please mark at least one GEOS node for live\npreview.\nYou can do so with a right click on a node.")
+					this.model.setValue(
+						'Please mark at least one GEOS node for live\npreview.\nYou can do so with a right click on a node.'
+					);
 					return;
 				}
 				const previewedNode = factory.previewedNodes.values().next().value as Node;
 				const data = factory.dataflowCache.get(previewedNode);
 				if (!data) {
-					this.model.setValue("Missing data for previewed node.");
+					this.model.setValue('Missing data for previewed node.');
 					return;
 				}
-				const xmlData = Object.entries(data).filter(([k,v]) => v instanceof XMLData) as [string, XMLData][];
+				const xmlData = Object.entries(data).filter(([k, v]) => v instanceof XMLData) as [
+					string,
+					XMLData
+				][];
 				if (xmlData.length === 0) {
-					this.model.setValue("No GEOS or XML data found for previewed node.");
+					this.model.setValue('No GEOS or XML data found for previewed node.');
 					return;
 				}
 				const res: string[] = [];
-				res.push(`<!-- Live preview: ${previewedNode.name ?? previewedNode.label} -->`);
 				// res.push('<!-- ')
-				for (const [k,v] of xmlData) {
+				for (const [k, v] of xmlData) {
 					if (xmlData.length > 1) res.push(`<!-- ${previewedNode.outputs[k].label} -->`);
 					res.push(v.toXml());
 				}
-				this.model.setValue(formatXml({xml: res.join("\n")}));
 				untrack(() => {
-					this.valid = true;
-				})
-			})
+					this.xml = formatXml({ xml: res.join('\n') });
+					if (this.xml && this.model)
+						this.model.setValue(
+							`<!-- Live preview: ${previewedNode.name ?? previewedNode.label} -->\n` + this.xml
+						);
+				});
+			});
 		}
-		
+
 		updateLivePreview() {
 			if (!codeEditor) return;
-			codeEditor.activeModel = this.active ? this.model : codeEditorCmpnt?.getModel();	
+			codeEditor.activeModel = this.active ? this.model : codeEditorCmpnt?.getModel();
 			codeEditor.readonly = this.active;
 		}
 	}
@@ -479,26 +490,38 @@
 </script>
 
 {#await codeEditorPromise then}
-{#if !livePreview.active}
-	<div
-		transition:fade={{ duration: 200 }}
-		class="absolute bottom-0 top-0 -translate-x-1/2 z-[5] nope-pt-[2.64rem] pointer-events-none overflow-clip"
-	>
-		<div class="h-full flex flex-col gap-2 justify-center pointer-events-none">
-			<CodeEditorIntegrationButton icon={faArrowRight} flip={'horizontal'} on:click={push} />
-			<CodeEditorIntegrationButton icon={faArrowRight} on:click={toCodeEditor} />
-			<CodeEditorIntegrationButton icon={faArrowDown} on:click={download} />
+	{#if !livePreview.active}
+		<div
+			transition:fade={{ duration: 200 }}
+			class="absolute bottom-0 top-0 -translate-x-1/2 z-[5] nope-pt-[2.64rem] pointer-events-none overflow-clip"
+		>
+			<div class="h-full flex flex-col gap-2 justify-center pointer-events-none">
+				<CodeEditorIntegrationButton icon={faArrowRight} flip={'horizontal'} on:click={push} />
+				<CodeEditorIntegrationButton icon={faArrowRight} on:click={toCodeEditor} />
+				<CodeEditorIntegrationButton icon={faArrowDown} on:click={download} />
+			</div>
 		</div>
-	</div>
 	{/if}
 {/await}
 <section
 	transition:slide={{ axis: 'x', duration: 200 }}
 	class="relative grid grid-rows-[0fr,1fr] h-full w-[40vw] overflow-clip border-s-2 border-base-300 dborder-base-content dborder-opacity-20"
 >
-	<CodeEditorComponent bind:this={codeEditorCmpnt} width="w-[40vw]" downloadAvailable={!livePreview.active || livePreview.valid}>
+	<CodeEditorComponent
+		bind:this={codeEditorCmpnt}
+		width="w-[40vw]"
+		downloadAvailable={!livePreview.active || livePreview.valid}
+		textToDownload={livePreview.xml}
+	>
 		{#snippet additionalButtons()}
-			<label class="label cursor-pointer gap-2 justify-self-end pe-2">
+			<label class="label cursor-pointer gap-2 justify-self-end pe-2"
+			use:shortcut={{ shortcuts: [{key: 'l', ctrl: true}], action(node, e) {
+				if (contextMenu.visible) return;
+				livePreview.active = !livePreview.active;
+			},}}
+
+			title={"Toggle the live preview. When active, the code editor is read-only and the live preview is shown.\n(Ctrl+L)"}
+			>
 				<input
 					type="checkbox"
 					class="toggle toggle-sm transition-all enabled:toggle-accent"
@@ -509,5 +532,10 @@
 			</label>
 		{/snippet}
 	</CodeEditorComponent>
-	<h1 class="select-none opacity-50 font-bold text-xl text-right text-nowrap truncate  pe-4 pb-2" title="Code Editor">Code Editor</h1>
+	<h1
+		class="select-none opacity-50 font-bold text-xl text-right text-nowrap truncate pe-4 pb-2"
+		title="Code Editor"
+	>
+		Code Editor
+	</h1>
 </section>

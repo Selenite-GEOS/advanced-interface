@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ArrangeButton from './buttons/ArrangeButton.svelte';
 	import CenterViewButton from './buttons/CenterViewButton.svelte';
 	import ClearButton from './buttons/ClearButton.svelte';
 	import CodeEditorButton from './buttons/CodeEditorButton.svelte';
@@ -35,6 +36,7 @@
 	</div>
 	<div class="grid justify-end place-content-start gap-2">
 		<Toolbar class="justify-end">
+			<ArrangeButton />
 			<CenterViewButton />
 			<CodeEditorButton />
 		</Toolbar>

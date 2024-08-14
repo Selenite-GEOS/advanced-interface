@@ -7,4 +7,4 @@
 	const save = getContext('save');
 </script>
 
-<EditorButton label="Save" icon={faFloppyDisk} class="dbtn-neutral" onclick={() => save()} />
+<EditorButton label="Save" description="Save all graphs and the code editor.&#013;(Ctrl+S)" icon={faFloppyDisk} class="dbtn-neutral" onclick={() => save()} />
