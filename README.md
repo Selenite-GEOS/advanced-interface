@@ -34,3 +34,4 @@ Releases are available on the [releases page](https://github.com/ShaitanLyss/sel
 - add search node and go next
 - add nodes tree view
 - improve responsivity
+- fix missing data for added node in live preview

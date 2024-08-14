@@ -47,7 +47,6 @@
 			? makeCodeEditor({
 					backend: 'monaco',
 					geosSchema,
-					openFile
 				})
 			: undefined
 	);
@@ -157,6 +156,7 @@
 			disabled={!codeEditor || disabled}
 			use:shortcut={{
 				...shortcutDef,
+				ignoreElements: [],
 				action(node, e) {
 					if (!codeEditor || disabled || unavailable)	return;
 					onclick?.(e);

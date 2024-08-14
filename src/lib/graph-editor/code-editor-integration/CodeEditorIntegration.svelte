@@ -515,7 +515,7 @@
 	>
 		{#snippet additionalButtons()}
 			<label class="label cursor-pointer gap-2 justify-self-end pe-2"
-			use:shortcut={{ shortcuts: [{key: 'l', ctrl: true}], action(node, e) {
+			use:shortcut={{ shortcuts: [{key: 'l', ctrl: true}], ignoreElements: [], action(node, e) {
 				if (contextMenu.visible) return;
 				livePreview.active = !livePreview.active;
 			},}}
