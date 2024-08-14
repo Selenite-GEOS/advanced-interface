@@ -8,6 +8,8 @@
 
 <EditorButton
 	label="Code Editor"
+	description={"toggle the code editor integration.\nThis integration allows you to go from graph to code and back"}
+	shortcut="shift+c"
 	icon={faFileCode}
 	class=""
 	activeFactoryAction={(factory) => {

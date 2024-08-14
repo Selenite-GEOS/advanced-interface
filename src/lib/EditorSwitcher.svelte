@@ -27,7 +27,11 @@
 				delete factories[id];
 			},
 			get label() {
-				return factories[id]?.editor.graphName ?? 'Loading...';
+				const graphName = factories[id]?.editor.graphName;
+				if (graphName === undefined) {
+					return 'Loading...';
+				}
+				return graphName.trim() === '' ? 'Untitled' : graphName;
 			},
 			set label(s: string) {
 				console.log('setting label', s);

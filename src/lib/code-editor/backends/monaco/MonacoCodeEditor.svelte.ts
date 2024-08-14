@@ -7,11 +7,13 @@ import * as monaco from 'monaco-editor';
 import { formatXml, XmlSchema } from '@selenite/commons';
 import { ErrorWNotif } from '@selenite/graph-editor';
 import './monaco';
+import { KeyCode, KeyMod } from 'monaco-editor/esm/vs/editor/editor.api';
 export default class MonacoCodeEditor implements ICodeEditor {
 	private monaco: typeof Monaco;
 	private editor?: Monaco.editor.IStandaloneCodeEditor;
 	private geosSchema: XmlSchema;
 	private model?: Monaco.editor.ITextModel;
+	models: Map<string, Monaco.editor.ITextModel> = new Map();
 
 	private constructor(params: { monaco: typeof Monaco; geosSchema: XmlSchema }) {
 		const { geosSchema } = params;
@@ -130,14 +132,25 @@ export default class MonacoCodeEditor implements ICodeEditor {
 			.map((selection) => editor.getModel()?.getValueInRange(selection) ?? '')
 			.join('\n');
 	}
-	setText(params: { text: string; cursorOffset?: number | null }): void {
+	setText(params: { text: string; cursorOffset?: number | null; history?: boolean }): void {
 		if (params.cursorOffset === undefined) params.cursorOffset = null;
 		if (!this.model) throw new ErrorWNotif('Model not created');
-		this.model.setValue(params.text);
-		if (params.cursorOffset !== null) {
-			const position = this.model.getPositionAt(params.cursorOffset);
-			this.editor?.setPosition(position);
+		if (params.history ?? true) {
+			this.editor?.executeEdits('', [
+				{
+					range: this.model.getFullModelRange(),
+					text: params.text
+				}
+			]);
+			this.editor?.pushUndoStop();
+		} else {
+			this.model.setValue(params.text);
 		}
+		// this.model.setValue(params.text);
+		// if (params.cursorOffset !== null) {
+		// 	const position = this.model.getPositionAt(params.cursorOffset);
+		// 	this.editor?.setPosition(position);
+		// }
 	}
 
 	setLightTheme(light: boolean): void {
@@ -166,10 +179,27 @@ export default class MonacoCodeEditor implements ICodeEditor {
 		return new MonacoCodeEditor({ monaco: monacoInstance, geosSchema });
 	}
 
-	public createModel(params: { value?: string; language?: string }) {
+	public createModel(params: { value?: string; language?: string }): Monaco.editor.ITextModel {
 		const model = this.monaco.editor.createModel(params.value ?? '', params.language);
-		this.editor?.setModel(model);
 		this.model = model;
+		return model;
+	}
+
+	#readonly: boolean = $state(false);
+	get readonly() {
+		return this.#readonly;
+	}
+
+	set readonly(r: boolean) {
+		this.editor?.updateOptions({ readOnly: r });
+		this.#readonly = r;
+	}
+
+	get activeModel() {
+		return this.model;
+	}
+	set activeModel(model: Monaco.editor.ITextModel | undefined) {
+		this.editor?.setModel(model ?? null);
 	}
 
 	public getText() {

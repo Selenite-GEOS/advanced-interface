@@ -1,6 +1,7 @@
 export * from './context.svelte';
 export * from './theme.svelte';
 import { persisted as basePersisted } from '@selenite/commons';
+import { readable } from 'svelte/store';
 
 export function persisted<T>(
 	key: string,
@@ -9,3 +10,6 @@ export function persisted<T>(
 ) {
 	return basePersisted<T>('selenite-graph-' + key, initialValue, options);
 }
+
+
+export const _ = readable((s: string) => s);

@@ -29,3 +29,9 @@ Releases are available on the [releases page](https://github.com/ShaitanLyss/sel
 ## TODO
 - move code integration to graph editor and remove unecessary deps like rete
 - move to pnpm
+- add multiple nodes preview
+- add preview node shortcut
+- add search node and go next
+- add nodes tree view
+- improve responsivity
+- fix missing data for added node in live preview

@@ -8,15 +8,18 @@
 
 	const context = getContext('editor');
 	const factory = $derived(context.activeFactory);
-	const canRedo: Readable<boolean> = $derived(factory ? factory.history.canRedo : readable(false));
+	const canRedo: Readable<boolean> = $derived(factory?.history ? factory.history.canRedo : readable(false));
 </script>
 
 <SmallEditorButton
 	label="Redo"
+	shortcut={['ctrl+shift+z', 'ctrl+y']}
 	icon={faRotateRight}
 	class="hover:btn-success text-success {$canRedo ? '' : '!bg-transparent'}"
 	disabled={!$canRedo}
 	activeFactoryAction={(factory) => {
-		factory.history.redo();
+		factory.bulkOperation(() => {
+			factory.history?.redo();
+		})
 	}}
 />

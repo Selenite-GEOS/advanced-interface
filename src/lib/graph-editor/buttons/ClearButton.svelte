@@ -5,6 +5,7 @@
 
 <EditorButton
 	label="Clear"
+	description="Delete selected elements, or all elements if none are selected."
 	class=""
 	icon={faEraser}
 	activeFactoryAction={async (factory) => {
