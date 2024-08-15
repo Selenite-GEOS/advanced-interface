@@ -165,6 +165,9 @@ export default class MonacoCodeEditor implements ICodeEditor {
 			dragAndDrop: true,
 			dropIntoEditor: { enabled: true }
 		});
+		this.editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyL, () => {
+			document.dispatchEvent(new KeyboardEvent('keydown', { key: 'l', ctrlKey: true, code: 'KeyL' }));
+		});
 	}
 
 	public destroy() {
