@@ -36,3 +36,4 @@ Releases are available on the [releases page](https://github.com/ShaitanLyss/sel
 - improve responsivity
 - fix missing data for added node in live preview
 - add delay before hiding top right toolbar
+- add play button with select to select a play node
