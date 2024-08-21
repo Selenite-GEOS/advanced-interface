@@ -31,8 +31,6 @@
 	import CodeEditorIntegrationButton from './CodeEditorIntegrationButton.svelte';
 	import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 	import { fade, slide } from 'svelte/transition';
-	import CodeEditorButton from '../buttons/CodeEditorButton.svelte';
-	import type { Model } from '$lib/code-editor/CodeEditor.svelte';
 	import { untrack } from 'svelte';
 	// import type { XmlAttributeDefinition } from "@sel";
 	const editorContext = getContext('editor');

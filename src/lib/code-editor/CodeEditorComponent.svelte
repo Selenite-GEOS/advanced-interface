@@ -191,7 +191,6 @@
 			onclick: clear,
 			needWritable: true,
 			descr: 'Clear the editor.',
-			shortcut: { key: 'c', ctrl: true }
 		})}
 		<input
 			type="text"
