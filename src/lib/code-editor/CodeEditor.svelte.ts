@@ -8,7 +8,7 @@ export interface ICodeEditor {
 	activeModel?: Model;
 	readonly: boolean;
 	setLightTheme(light: boolean): void;
-	getText(): { text: string; cursorOffset: number | null };
+	getText(): { text: string; cursorOffset: number | null } | undefined;
 	setText(params: { text: string; cursorOffset?: number | null, history?: boolean }): void;
 	setup_(params: { container: HTMLElement }): void;
 	getSelectedText(): string;

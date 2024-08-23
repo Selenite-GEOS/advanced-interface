@@ -10,7 +10,7 @@
 	import { fade, slide } from 'svelte/transition';
 	import { persisted } from './global';
 	import { NodeStorage } from '@selenite/graph-editor';
-	import { shortcut } from '@selenite/commons';
+	import { resizable, shortcut } from '@selenite/commons';
 
 	// TODO: Remove
 	let saved = persisted<string | null>('selected-browser', null);

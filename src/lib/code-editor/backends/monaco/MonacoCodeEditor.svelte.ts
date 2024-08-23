@@ -12,8 +12,7 @@ export default class MonacoCodeEditor implements ICodeEditor {
 	private monaco: typeof Monaco;
 	private editor?: Monaco.editor.IStandaloneCodeEditor;
 	private geosSchema: XmlSchema;
-	private model?: Monaco.editor.ITextModel;
-	models: Map<string, Monaco.editor.ITextModel> = new Map();
+	models: Monaco.editor.ITextModel[] = [];
 
 	private constructor(params: { monaco: typeof Monaco; geosSchema: XmlSchema }) {
 		const { geosSchema } = params;
@@ -29,7 +28,7 @@ export default class MonacoCodeEditor implements ICodeEditor {
 			provideHover(model, position, token) {
 				const hoveredWord = model.getWordAtPosition(position);
 				if (!hoveredWord) return null;
-				console.log('hoveredWord', hoveredWord);
+				console.debug('hoveredWord', hoveredWord);
 				// The following regex first discriminates <? to avoid tagging <?xml as a tag
 				const tagMatch = model.findPreviousMatch(
 					'(?:<\\?|>|<(\\w+)[\\s\\r\\n]+|</?\\s*(\\w+))',
@@ -41,7 +40,7 @@ export default class MonacoCodeEditor implements ICodeEditor {
 				);
 				const isWithinTag = tagMatch !== null && tagMatch.matches?.at(1) !== undefined;
 				const isTag = tagMatch !== null && tagMatch.matches?.at(2) !== undefined;
-				console.log('isTag', isTag, 'isWithinTag', isWithinTag);
+				console.debug('isTag', isTag, 'isWithinTag', isWithinTag);
 
 				if (isTag) {
 					const tag = hoveredWord.word;
@@ -74,8 +73,11 @@ export default class MonacoCodeEditor implements ICodeEditor {
 						null,
 						true
 					);
-					console.log('attributeMatch', attributeMatch?.matches);
-					console.log(attributeMatch?.matches?.at(1) === undefined);
+					console.debug(
+						'attributeMatch',
+						attributeMatch?.matches,
+						attributeMatch?.matches?.at(1) === undefined
+					);
 					const isAttr =
 						attributeMatch !== null &&
 						attributeMatch.matches?.at(1) === undefined &&
@@ -134,17 +136,17 @@ export default class MonacoCodeEditor implements ICodeEditor {
 	}
 	setText(params: { text: string; cursorOffset?: number | null; history?: boolean }): void {
 		if (params.cursorOffset === undefined) params.cursorOffset = null;
-		if (!this.model) throw new ErrorWNotif('Model not created');
+		if (!this.activeModel) throw new ErrorWNotif('Model not created');
 		if (params.history ?? true) {
 			this.editor?.executeEdits('', [
 				{
-					range: this.model.getFullModelRange(),
+					range: this.activeModel.getFullModelRange(),
 					text: params.text
 				}
 			]);
 			this.editor?.pushUndoStop();
 		} else {
-			this.model.setValue(params.text);
+			this.activeModel.setValue(params.text);
 		}
 		// this.model.setValue(params.text);
 		// if (params.cursorOffset !== null) {
@@ -172,7 +174,8 @@ export default class MonacoCodeEditor implements ICodeEditor {
 
 	public destroy() {
 		this.editor?.dispose();
-		this.model?.dispose();
+		// this.models.forEach(model => model.dispose());
+		// this.models = [];
 	}
 
 	public static async create({ geosSchema }: { geosSchema: XmlSchema }) {
@@ -181,10 +184,9 @@ export default class MonacoCodeEditor implements ICodeEditor {
 		// const monaco = (await import('./monaco')).default;
 		return new MonacoCodeEditor({ monaco: monacoInstance, geosSchema });
 	}
-
 	public createModel(params: { value?: string; language?: string }): Monaco.editor.ITextModel {
 		const model = this.monaco.editor.createModel(params.value ?? '', params.language);
-		this.model = model;
+		this.models.push(model);
 		return model;
 	}
 
@@ -199,26 +201,29 @@ export default class MonacoCodeEditor implements ICodeEditor {
 	}
 
 	get activeModel() {
-		return this.model;
+		return this.editor?.getModel() ?? undefined;
 	}
 	set activeModel(model: Monaco.editor.ITextModel | undefined) {
 		this.editor?.setModel(model ?? null);
 	}
 
 	public getText() {
-		const res: ReturnType<ICodeEditor['getText']> = { text: '', cursorOffset: null };
-		if (!this.model) throw new ErrorWNotif('Model not created');
-		res.text = this.model.getValue();
+		if (!this.activeModel) {
+			console.error('Model not created');
+			return undefined;
+		}
+		const text = this.activeModel.getValue();;
 		if (!this.editor) {
 			console.error('Editor not created');
-			return res;
+			return undefined;
 		}
+		const res: ReturnType<ICodeEditor['getText']> = { text, cursorOffset: null };
 		const position = this.editor.getPosition();
 		if (!position) {
 			console.error('Position not found');
 			return res;
 		}
-		res.cursorOffset = this.model.getOffsetAt(position);
+		res.cursorOffset = this.activeModel.getOffsetAt(position);
 		return res;
 	}
 }

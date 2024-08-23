@@ -13,7 +13,8 @@
 	} from '@selenite/commons';
 
 	type Props = {
-		width?: string;
+		width?: number;
+		visible?: boolean;
 		/** Additional buttons for the code editor toolbar. */
 		additionalButtons?: Snippet;
 		/** Whether download is available. Defaults to true. */
@@ -21,7 +22,8 @@
 		textToDownload?: string;
 	};
 	let {
-		width = 'w-full',
+		visible = true,
+		width,
 		additionalButtons,
 		downloadAvailable = true,
 		textToDownload
@@ -108,7 +110,9 @@
 	}
 
 	function saveFile(e: Event) {
-		download(filenameWithXmlExtension, textToDownload ?? codeEditor?.getText().text);
+		const text = codeEditor?.getText()?.text;
+		if (!text) return;
+		download(filenameWithXmlExtension, textToDownload ?? text);
 	}
 
 	const filename = persisted('codeEditorFilename', 'problem');
@@ -209,12 +213,12 @@
 		{@render additionalButtons()}
 	{/if}
 </nav>
-<div class="transition-colors overflow {width}">
+<div class="transition-colors overflow grid">
 	{#await codeEditorPromise}
 		<div class="w-full flex justify-center p-2">Loading...</div>
-	{:then}
-		{#if codeEditorAction}
-			<div class="h-full w-full" use:codeEditorAction transition:fade={{ duration: 100 }}></div>
+		{:then}
+		{#if codeEditorAction && visible}
+			<div class="h-full" style="width: {width}px;" use:codeEditorAction transition:fade={{ duration: 100 }}></div>
 		{/if}
 	{:catch}
 		<div class="absolute top-0 h-full flex flex-col justify-center align-middle">

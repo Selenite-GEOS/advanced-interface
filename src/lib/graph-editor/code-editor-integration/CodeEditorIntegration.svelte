@@ -11,7 +11,7 @@
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
 	import { _, persisted } from '$lib/global';
-	import { formatXml, shortcut } from '@selenite/commons';
+	import { formatXml, shortcut, resizable } from '@selenite/commons';
 	import { type Node } from '@selenite/graph-editor';
 	import { untrack } from 'svelte';
 
@@ -39,9 +39,9 @@
 		if (!factory) throw new ErrorWNotif('No active editor');
 		if (!geosSchema) throw new ErrorWNotif('No geos schema');
 
-		const { text, cursorOffset } = codeEditor.getText();
-		const res = await factory.codeIntegration.toCode({ schema: geosSchema, text });
-
+		const text = codeEditor.getText();
+		if (!text) return;
+		const res = await factory.codeIntegration.toCode({ schema: geosSchema, text: text.text });
 		codeEditor.setText({ text: res });
 	}
 	/**
@@ -54,8 +54,10 @@
 		if (!factory) throw new ErrorWNotif('No active editor');
 
 		const selectedText = codeEditor.getSelectedText();
+		const text = selectedText.length > 0 ? selectedText : codeEditor.getText()?.text;
+		if (!text || text.trim().length === 0) return;
 		await factory.codeIntegration.toGraph({
-			text: selectedText.length > 0 ? selectedText : codeEditor.getText().text,
+			text,
 			schema: geosSchema
 		});
 	}
@@ -196,6 +198,8 @@
 		}
 	}
 	const livePreview = new LivePreview();
+	let visible = $state(true);
+	let width = persisted<number | undefined>('code-integration-width', undefined);
 </script>
 
 {#await codeEditorPromise then}
@@ -214,41 +218,50 @@
 {/await}
 <section
 	transition:slide={{ axis: 'x', duration: 200 }}
-	class="relative grid grid-rows-[0fr,1fr] h-full w-[40vw] overflow-clip border-s-2 border-base-300 dborder-base-content dborder-opacity-20"
+	class="relative grid h-full overflow-clip border-s-2 border-base-300 dborder-base-content dborder-opacity-20"
 >
-	<CodeEditorComponent
-		bind:this={codeEditorCmpnt}
-		width="w-[40vw]"
-		downloadAvailable={!livePreview.active || livePreview.valid}
-		textToDownload={livePreview.xml}
+	<div
+		class="w-[40vw] grid grid-rows-[0fr,1fr,0fr]"
+		style="width: {$width}px;"
+		use:resizable={{ sides: { left: true }, onresize: ({ width: w }) => ($width = w) }}
 	>
-		{#snippet additionalButtons()}
-			<label
-				class="label cursor-pointer gap-2 justify-self-end pe-2"
-				use:shortcut={{
-					shortcuts: [{ key: 'l', ctrl: true }],
-					ignoreElements: [],
-					action(node, e) {
-						if (contextMenu.visible) return;
-						livePreview.active = !livePreview.active;
-					}
-				}}
-				title={'Toggle the live preview. When active, the code editor is read-only and the live preview is shown.\n(Ctrl+L)'}
+		<CodeEditorComponent
+			bind:this={codeEditorCmpnt}
+			{visible}
+			width={$width}
+			downloadAvailable={!livePreview.active || livePreview.valid}
+			textToDownload={livePreview.xml}
+		>
+			{#snippet additionalButtons()}
+				<label
+					class="label cursor-pointer gap-2 justify-self-end pe-2"
+					use:shortcut={{
+						shortcuts: [{ key: 'l', ctrl: true }],
+						ignoreElements: [],
+						action(node, e) {
+							if (contextMenu.visible) return;
+							livePreview.active = !livePreview.active;
+						}
+					}}
+					title={'Toggle the live preview. When active, the code editor is read-only and the live preview is shown.\n(Ctrl+L)'}
+				>
+					<input
+						type="checkbox"
+						class="toggle toggle-sm transition-all enabled:toggle-accent"
+						disabled={!codeEditor}
+						bind:checked={livePreview.active}
+					/>
+					<span class="label-text text-nowrap">Live preview</span>
+				</label>
+			{/snippet}
+		</CodeEditorComponent>
+		<div class="monaco-editor !outline-none">
+			<h1
+				class="bottom-0 right-0 absolute z-10 select-none opacity-50 font-bold text-xl text-right text-nowrap truncate pe-8 py-2 text-base-content"
+				title="Code Editor"
 			>
-				<input
-					type="checkbox"
-					class="toggle toggle-sm transition-all enabled:toggle-accent"
-					disabled={!codeEditor}
-					bind:checked={livePreview.active}
-				/>
-				<span class="label-text text-nowrap">Live preview</span>
-			</label>
-		{/snippet}
-	</CodeEditorComponent>
-	<h1
-		class="select-none opacity-50 font-bold text-xl text-right text-nowrap truncate pe-4 pb-2"
-		title="Code Editor"
-	>
-		Code Editor
-	</h1>
+				Code Editor
+			</h1>
+		</div>
+	</div>
 </section>
