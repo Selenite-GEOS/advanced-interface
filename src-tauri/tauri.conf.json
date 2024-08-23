@@ -12,9 +12,6 @@
 		"windows": [
 			{
 				"title": "Selenite - GEOS Graph Editor",
-				"width": 1200,
-				"height": 700,
-				"center": true,
 				"resizable": true,
 				"maximized": true
 			}
