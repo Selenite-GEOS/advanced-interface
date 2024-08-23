@@ -65,10 +65,10 @@
 	 */
 	async function toGraph() {
 		if (!geosSchema) throw new ErrorWNotif('No geos schema');
-		if (!codeEditorPromise) return;
+		if (!codeEditor) return;
 		const factory = editorContext.activeFactory;
 		if (!factory) throw new ErrorWNotif('No active editor');
-		const codeEditor = await codeEditorPromise;
+		
 		const selectedText = codeEditor.getSelectedText();
 		await factory.codeIntegration.toGraph({text: selectedText.length > 0 ? selectedText : codeEditor.getText().text, schema: geosSchema})	
 	}
