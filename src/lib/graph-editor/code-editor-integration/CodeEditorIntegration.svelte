@@ -1,37 +1,25 @@
 <script lang="ts">
 	import { CodeEditorComponent } from '$lib/code-editor';
-	import { contextMenu, ErrorWNotif, notifications, XMLData, XmlNode } from '@selenite/graph-editor';
+	import {
+		contextMenu,
+		ErrorWNotif,
+		notifications,
+		XMLData,
+		XmlNode
+	} from '@selenite/graph-editor';
 	// import { ErrorWNotif, getContext, _ } from '$lib/global';
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
 	import { _, persisted } from '$lib/global';
-	import {
-		parseXml,
-		type ParsedXmlNodes,
-		formatXml,
-		getElementFromParsedXml,
-		getXmlAttributes,
+	import { formatXml, shortcut } from '@selenite/commons';
+	import { type Node } from '@selenite/graph-editor';
+	import { untrack } from 'svelte';
 
-		shortcut
-
-	} from '@selenite/commons';
-	import { AutoArrangePlugin, Presets as ArrangePresets } from 'rete-auto-arrange-plugin';
-	import {
-		type Schemes,
-		type Node,
-		type NodeSaveData,
-		type AreaExtra,
-		GetNameNode
-	} from '@selenite/graph-editor';
-	import { AreaExtensions, AreaPlugin, type NodeView } from 'rete-area-plugin';
-
-	import type { XmlSchema } from '@selenite/commons';
 	import { get } from 'svelte/store';
 	import { getContext } from '$lib/global';
 	import CodeEditorIntegrationButton from './CodeEditorIntegrationButton.svelte';
 	import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 	import { fade, slide } from 'svelte/transition';
-	import { untrack } from 'svelte';
 	// import type { XmlAttributeDefinition } from "@sel";
 	const editorContext = getContext('editor');
 	const geosContext = getContext('geos');
@@ -40,7 +28,6 @@
 	let codeEditorCmpnt = $state<CodeEditorComponent>();
 	const codeEditorPromise = $derived(codeEditorCmpnt?.getCodeEditorContext().codeEditorPromise);
 	const codeEditor = $derived(codeEditorCmpnt?.getCodeEditorContext().codeEditor);
-	const cursorTag = 'cursorPositioooon';
 
 	/**
 	 * Pulls the selected nodes from the graph editor to the code editor
@@ -53,9 +40,6 @@
 		if (!geosSchema) throw new ErrorWNotif('No geos schema');
 
 		const { text, cursorOffset } = codeEditor.getText();
-		// let preppedText = text;
-		// if (cursorOffset !== null)
-		// 	preppedText = text.slice(0, cursorOffset) + `<${cursorTag}/>` + text.slice(cursorOffset);
 		const res = await factory.codeIntegration.toCode({ schema: geosSchema, text });
 
 		codeEditor.setText({ text: res });
@@ -68,9 +52,12 @@
 		if (!codeEditor) return;
 		const factory = editorContext.activeFactory;
 		if (!factory) throw new ErrorWNotif('No active editor');
-		
+
 		const selectedText = codeEditor.getSelectedText();
-		await factory.codeIntegration.toGraph({text: selectedText.length > 0 ? selectedText : codeEditor.getText().text, schema: geosSchema})	
+		await factory.codeIntegration.toGraph({
+			text: selectedText.length > 0 ? selectedText : codeEditor.getText().text,
+			schema: geosSchema
+		});
 	}
 
 	async function download() {
@@ -236,13 +223,17 @@
 		textToDownload={livePreview.xml}
 	>
 		{#snippet additionalButtons()}
-			<label class="label cursor-pointer gap-2 justify-self-end pe-2"
-			use:shortcut={{ shortcuts: [{key: 'l', ctrl: true}], ignoreElements: [], action(node, e) {
-				if (contextMenu.visible) return;
-				livePreview.active = !livePreview.active;
-			},}}
-
-			title={"Toggle the live preview. When active, the code editor is read-only and the live preview is shown.\n(Ctrl+L)"}
+			<label
+				class="label cursor-pointer gap-2 justify-self-end pe-2"
+				use:shortcut={{
+					shortcuts: [{ key: 'l', ctrl: true }],
+					ignoreElements: [],
+					action(node, e) {
+						if (contextMenu.visible) return;
+						livePreview.active = !livePreview.active;
+					}
+				}}
+				title={'Toggle the live preview. When active, the code editor is read-only and the live preview is shown.\n(Ctrl+L)'}
 			>
 				<input
 					type="checkbox"
