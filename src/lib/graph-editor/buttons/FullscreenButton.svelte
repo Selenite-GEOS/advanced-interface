@@ -3,6 +3,7 @@
 	import EditorButton from '../EditorButton.svelte';
 	import { getCurrentWindow } from '@tauri-apps/api/window';
 	import { isTauri } from '@tauri-apps/api/core';
+	import { notifications } from '@selenite/graph-editor';
 	let fullscreen = $state(false);
 </script>
 
@@ -11,18 +12,18 @@
 	description={`${fullscreen ? 'Leave' : 'Enter'} full screen mode.`}
 	shortcut="f11"
 	icon={fullscreen ? faCompress : faMaximize}
-	onclick={() => {
-		if (document.fullscreenElement) {
+	onclick={async () => {
+		if (fullscreen) {
 			fullscreen = false;
 			if (isTauri()) {
-				getCurrentWindow().setFullscreen(false);
+				notifications.show({message: JSON.stringify(await getCurrentWindow().setFullscreen(false))});
 			} else {
 				document.exitFullscreen();
 			}
 		} else {
 			fullscreen = true;
 			if (isTauri()) {
-				getCurrentWindow().setFullscreen(true);
+				notifications.show({message: JSON.stringify(await getCurrentWindow().setFullscreen(true))});
 			} else {
 				document.documentElement.requestFullscreen();
 			}

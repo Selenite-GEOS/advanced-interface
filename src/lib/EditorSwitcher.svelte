@@ -8,6 +8,7 @@
 	import GraphBrowser from './GraphBrowser.svelte';
 	import CodeEditorIntegration from './graph-editor/code-editor-integration/CodeEditorIntegration.svelte';
 	import GraphEditorShortcuts from './graph-editor/GraphEditorShortcuts.svelte';
+	import { writable } from 'svelte/store';
 	const tabs = getContext('tabs');
 	tabs.defaultAddCallback = addEditor;
 
@@ -70,7 +71,8 @@
 	const saves = getContext('saves');
 	saves.add(save);
 
-	let displayCodeEditor = persisted('display-code-editor', false);
+	// let displayCodeEditor = persisted('display-code-editor', false);
+	const displayCodeEditor = writable(false);
 	setContext('editor', {
 		get activeFactory() {
 			return factories[tabs.selected?.id ?? ''];
