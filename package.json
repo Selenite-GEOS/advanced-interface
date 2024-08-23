@@ -39,7 +39,7 @@
 		"eslint": "^9.9.0",
 		"fast-xml-parser": "^4.4.1",
 		"lodash-es": "^4.17.21",
-		"monaco-editor": "^0.50.0",
+		"monaco-editor": "^0.51.0",
 		"postcss": "^8.4.41",
 		"prettier": "^3.3.3",
 		"rete-area-plugin": "^2.0.5",
