@@ -2,8 +2,21 @@ name: Build & Release desktop app
 
 on:
   push:
+    paths:
+      [
+        'src/**',
+        'src-tauri/**',
+        'package.json',
+        'tsconfig.json',
+        'bun.lockb',
+        '.github/workflows/release-tauri.yml',
+        'svelte.config.js',
+        'tailwind.config.js',
+        'vite.config.js',
+        'postcss.config.js',
+      ]
     branches:
-      - release
+      - main
 
 # This workflow will trigger on each push to the `release` branch to create or update a GitHub release, build your app, and upload the artifacts to the release.
 

@@ -5,6 +5,7 @@
 	import CodeEditorButton from './buttons/CodeEditorButton.svelte';
 	import CreateMacroBlock from './buttons/CreateMacroBlock.svelte';
 	import DownloadButton from './buttons/DownloadButton.svelte';
+	import FullscreenButton from './buttons/FullscreenButton.svelte';
 	import GridButton from './buttons/GridButton.svelte';
 	import LoadButton from './buttons/LoadButton.svelte';
 	import RedoButton from './buttons/RedoButton.svelte';
@@ -38,6 +39,7 @@
 		<Toolbar class="justify-end">
 			<ArrangeButton />
 			<CenterViewButton />
+			<FullscreenButton />
 			<CodeEditorButton />
 		</Toolbar>
 		<Toolbar class="justify-end me-2">
