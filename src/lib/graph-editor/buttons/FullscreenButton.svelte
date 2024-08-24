@@ -5,6 +5,18 @@
 	import { isTauri } from '@tauri-apps/api/core';
 	import { notifications } from '@selenite/graph-editor';
 	let fullscreen = $state(false);
+
+	function onFullscreenChange() {
+		fullscreen = document.fullscreenElement !== null;
+	}
+
+	$effect(() => {
+		window.addEventListener('fullscreenchange', onFullscreenChange);
+
+		return () => {
+			window.removeEventListener('fullscreenchange', onFullscreenChange);
+		};
+	})
 </script>
 
 <EditorButton
