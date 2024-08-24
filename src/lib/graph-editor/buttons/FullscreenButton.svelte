@@ -11,24 +11,24 @@
 		fullscreen = !!document.fullscreenElement;
 	}
 
-	function preventF11(e: KeyboardEvent) {
-		if (e.key === 'F11') {
-			console.log('Preventing F11');
-			notifications.warn({message: 'F11 has been disabled for fullscreen, use F10 or Alt+Enter instead.', title: 'Fullscreen'});
-			e.preventDefault();
-			e.stopPropagation();
-			e.stopImmediatePropagation();
-		}
-	}
+	// function preventF11(e: KeyboardEvent) {
+	// 	if (e.key === 'F11') {
+	// 		console.log('Preventing F11');
+	// 		notifications.warn({message: 'F11 has been disabled for fullscreen, use F10 or Alt+Enter instead.', title: 'Fullscreen'});
+	// 		e.preventDefault();
+	// 		e.stopPropagation();
+	// 		e.stopImmediatePropagation();
+	// 	}
+	// }
 	$effect(() => {
 		if (!isTauri()) {
-			document.addEventListener('keydown', preventF11);
-			window.addEventListener('keydown', preventF11);
+			// document.addEventListener('keydown', preventF11);
+			// window.addEventListener('keydown', preventF11);
 			document.addEventListener('fullscreenchange', onFullscreenChange);
 			return () => {
 				document.removeEventListener('fullscreenchange', onFullscreenChange);
-				document.removeEventListener('keydown', preventF11);
-				window.removeEventListener('keydown', preventF11);
+				// document.removeEventListener('keydown', preventF11);
+				// window.removeEventListener('keydown', preventF11);
 			};
 		}
 	});
