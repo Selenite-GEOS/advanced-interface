@@ -6,7 +6,7 @@
 	let fullscreen = $state(false);
 
 	function onFullscreenChange() {
-		console.log("Fullscreen change", document.fullscreenElement);
+		console.debug("Fullscreen change", document.fullscreenElement);
 		fullscreen = !!document.fullscreenElement;
 	}
 
