@@ -3,6 +3,7 @@
 	import EditorButton from '../EditorButton.svelte';
 	import { getCurrentWindow } from '@tauri-apps/api/window';
 	import { isTauri } from '@tauri-apps/api/core';
+	import { sleep } from '@selenite/commons';
 	let fullscreen = $state(false);
 
 	function onFullscreenChange() {
@@ -34,12 +35,13 @@
 			fullscreen = !fullscreen;
 			getCurrentWindow().setFullscreen(fullscreen);
 		} else {
-			fullscreen = document.fullscreenElement === null;
-			if (fullscreen) {
+			window.focus();
+			if (document.fullscreenElement === null) {
 				await document.documentElement.requestFullscreen();
 			} else {
 				await document.exitFullscreen();
 			}
+			fullscreen = document.fullscreenElement !== null;
 		}
 	}}
 />
