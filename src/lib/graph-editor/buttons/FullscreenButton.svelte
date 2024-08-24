@@ -3,20 +3,24 @@
 	import EditorButton from '../EditorButton.svelte';
 	import { getCurrentWindow } from '@tauri-apps/api/window';
 	import { isTauri } from '@tauri-apps/api/core';
-	import { notifications } from '@selenite/graph-editor';
 	let fullscreen = $state(false);
 
 	function onFullscreenChange() {
-		fullscreen = document.fullscreenElement !== null;
+		console.log("Fullscreen change", document.fullscreenElement);
+		fullscreen = !!document.fullscreenElement;
 	}
 
 	$effect(() => {
-		window.addEventListener('fullscreenchange', onFullscreenChange);
-
-		return () => {
-			window.removeEventListener('fullscreenchange', onFullscreenChange);
-		};
+		if (!isTauri()) {
+		document.addEventListener('fullscreenchange', onFullscreenChange);
+		return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+		}
 	})
+
+	// $effect(() => {
+	// 	document.addEventListener('fullscreenchange', onFullscreenChange);
+	// 	return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+	// });
 </script>
 
 <EditorButton
@@ -24,20 +28,17 @@
 	description={`${fullscreen ? 'Leave' : 'Enter'} full screen mode.`}
 	shortcut="f11"
 	icon={fullscreen ? faCompress : faMaximize}
-	onclick={async () => {
-		if (fullscreen) {
-			fullscreen = false;
-			if (isTauri()) {
-				notifications.show({message: JSON.stringify(await getCurrentWindow().setFullscreen(false))});
-			} else {
-				document.exitFullscreen();
-			}
+	onclick={async (e) => {
+		e.preventDefault();
+		if (isTauri()) {
+			fullscreen = !fullscreen;
+			getCurrentWindow().setFullscreen(fullscreen);
 		} else {
-			fullscreen = true;
-			if (isTauri()) {
-				notifications.show({message: JSON.stringify(await getCurrentWindow().setFullscreen(true))});
+			fullscreen = document.fullscreenElement === null;
+			if (fullscreen) {
+				await document.documentElement.requestFullscreen();
 			} else {
-				document.documentElement.requestFullscreen();
+				await document.exitFullscreen();
 			}
 		}
 	}}
