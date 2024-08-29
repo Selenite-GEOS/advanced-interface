@@ -42,6 +42,9 @@
 		}
 		const res = await setupFullGraphEditor({
 			container,
+			xmlSchemas: {
+				geos: schema
+			},
 			additionalNodeItems: [
 				...xmlNodeItems({
 					schema,
