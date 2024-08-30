@@ -209,9 +209,9 @@
 			class="absolute bottom-0 top-0 -translate-x-1/2 z-[5] nope-pt-[2.64rem] pointer-events-none overflow-clip"
 		>
 			<div class="h-full flex flex-col gap-2 justify-center pointer-events-none">
-				<CodeEditorIntegrationButton icon={faArrowRight} flip={'horizontal'} on:click={toGraph} />
-				<CodeEditorIntegrationButton icon={faArrowRight} on:click={toCodeEditor} />
-				<CodeEditorIntegrationButton icon={faArrowDown} on:click={download} />
+				<CodeEditorIntegrationButton icon={faArrowRight} flip={'horizontal'} onclick={toGraph} />
+				<CodeEditorIntegrationButton icon={faArrowRight} onclick={toCodeEditor} />
+				<CodeEditorIntegrationButton icon={faArrowDown} onclick={download} />
 			</div>
 		</div>
 	{/if}
