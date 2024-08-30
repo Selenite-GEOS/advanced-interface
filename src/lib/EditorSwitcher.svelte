@@ -2,7 +2,7 @@
 	import Editor from './graph-editor/Editor.svelte';
 	import { getContext, persisted, setContext } from '$lib';
 	import { newUuid, type SaveData } from '@selenite/commons';
-	import type { NodeEditor, NodeFactory } from '@selenite/graph-editor';
+	import type { NodeEditor, NodeEditorSaveData, NodeFactory } from '@selenite/graph-editor';
 	import { SvelteSet } from 'svelte/reactivity';
 	import EditorOverlay from './graph-editor/EditorOverlay.svelte';
 	import GraphBrowser from './GraphBrowser.svelte';
@@ -18,8 +18,9 @@
 	let factories = $state<Record<string, NodeFactory | undefined>>({});
 	const deleted = new SvelteSet();
 
-	function addEditor(id?: string) {
+	function addEditor(id?: string, savedGraph?: NodeEditorSaveData) {
 		if (id === undefined) id = newUuid('graph-editor');
+		if (savedGraph) initialGraphs[id] = savedGraph;
 		factories[id] = undefined;
 		tabs.add({
 			id,
@@ -87,7 +88,37 @@
 			$displayCodeEditor = value;
 		}
 	});
+	let memo_examples: NodeEditorSaveData[] | undefined = undefined;
+	async function getExamples(): Promise<NodeEditorSaveData[]> {
+		if (!memo_examples) {
+			console.log('Importing examples...');
+			memo_examples = (await import('@selenite/graph-editor'))
+				.examples as unknown as NodeEditorSaveData[];
+		}
+		return memo_examples;
+	}
+	tabs.additionalAddBtn = {
+		snippet: ExamplesList,
+		prefetch: getExamples
+	};
 </script>
+
+{#snippet ExamplesList()}
+	<h2 class="text-xl font-bold m-auto">Examples</h2>
+	{#await getExamples()}
+		<span class="p-2">Loading examples...</span>
+	{:then examples}
+		{#each examples as ex}
+			<button
+				class="btn"
+				onclick={() => {
+					addEditor(undefined, ex);
+					tabs.additionalAddPopupVisible = false;
+				}}>{ex.editorName}</button
+			>
+		{/each}
+	{/await}
+{/snippet}
 
 <div class="h-full w-full grid grid-cols-[0fr,1fr,0fr]">
 	<GraphEditorShortcuts />

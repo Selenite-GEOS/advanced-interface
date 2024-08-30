@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext } from '$lib/global';
-	import type { SaveData } from '@selenite/commons';
+	import { animationFrame, type SaveData } from '@selenite/commons';
 	import {
 		type NodeEditor,
 		NodeFactory,
@@ -36,6 +36,7 @@
 		};
 	});
 	async function setup() {
+		await animationFrame(10);
 		const schema = geosContext.schema;
 		if (!schema) {
 			throw new Error('Missing schema for editor setup.');

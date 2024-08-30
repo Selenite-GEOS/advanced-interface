@@ -6,20 +6,27 @@
 		parseXsdFromUrl,
 		scrollIntoView,
 		shortcut,
-		XmlSchema
+		XmlSchema,
+		takeFocus,
+		handleFocusLeave
 	} from '@selenite/commons';
 	import {
 		notifications,
 		NotificationsComponent,
 		ContextMenuComponent,
 		ModalComponent,
-		Modal
+		Modal,
+
+		type NodeEditorSaveData
+
 	} from '@selenite/graph-editor';
 	import '../app.css';
-	import { faEllipsisH, faPlus, faTimes, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+	import { faEllipsisH, faPlus, faTimes, faExternalLinkAlt, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import ThemeSelector from '$lib/ThemeSelector.svelte';
 	import { flip } from 'svelte/animate';
+	import {createFloatingActions } from 'svelte-floating-ui';
+	import { offset } from 'svelte-floating-ui/core';
 	let { children } = $props();
 
 	const tabs = new Tabs();
@@ -58,13 +65,23 @@
 			geosSchema = schema;
 		});
 	});
+	const [ specialAddRef, specialAddPopup  ] = createFloatingActions({middleware: [offset(5)],
+		placement: 'bottom-start'
+	});
 </script>
 
 {#snippet RenameTabModal(tab: Tab)}
 	<input bind:value={tab.label} class="input input-bordered text-base-content" />
 {/snippet}
 
-
+{#if tabs.additionalAddPopupVisible && tabs.additionalAddBtn}
+{@const btn = tabs.additionalAddBtn}
+<div role="menu" tabindex="-1" use:specialAddPopup use:takeFocus={true} use:handleFocusLeave={() => tabs.additionalAddPopupVisible = false}
+	class="z-50 bg-neutral p-2 rounded-box flex gap-2 flex-col"
+	>
+	{@render btn.snippet()}
+</div>
+{/if}
 
 <div
 	class="grid grid-rows-[0fr,1fr] h-screen w-screen overflow-clip"
@@ -102,8 +119,9 @@
 				<div
 					tabindex="0"
 					role="tab"
-					class="tab !cursor-pointer relative group min-w-[6rem]"
+					class="tab !cursor-pointer relative group min-w-[7.5rem] max-w-[14rem]"
 					class:tab-active={tabs.selected === tab}
+					title={tab.label}
 					animate:flip={{ duration: tabs.selected === tab ? 100 : 100 }}
 					use:scrollIntoView={tabs.selected === tab}
 					use:draggableItem={{
@@ -129,12 +147,13 @@
 						if (e.key === 'Enter') tabs.selected = tab;
 					}}
 				>
-					<span class="px-2 text-nowrap">
+					<span class="px-2 text-nowrap truncate">
 						{tab?.label}
 					</span>
 					<div
 						tabindex="0"
 						role="button"
+						title="Close tab"
 						class="absolute z-10 right-0.5 top-0.5 opacity-0 p-0.5 group-hover:opacity-100 btn-ghost btn-circle w-fit h-fit"
 						onclick={tab?.onclose}
 						onkeydown={(e) => {
@@ -145,9 +164,17 @@
 					</div>
 				</div>
 			{/each}
+			{#if tabs.defaultAddCallback}
 			<button class="tab hover btn-ghost" onclick={(e) => tabs.defaultAddCallback()}
 				><Fa icon={faPlus} /></button
 			>
+			{/if}
+			{#if tabs.additionalAddBtn}
+			{@const btn = tabs.additionalAddBtn}
+			<button class="tab hover btn-ghost !ps-2 !pe-2" onfocus={() => btn.prefetch?.()} onpointerenter={() => btn.prefetch?.()} onkeydown={(e) => { if (e.key === "Enter") tabs.additionalAddPopupVisible = !tabs.additionalAddPopupVisible}}  onpointerdown={(e) => tabs.additionalAddPopupVisible = !tabs.additionalAddPopupVisible} use:specialAddRef
+				><Fa icon={faCaretDown} size="sm" /></button
+			>
+			{/if}
 		</div>
 		<div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center z-10">
 			<Fa icon={faEllipsisH} class="group-hover:opacity-0 transition-all  h-full text-4xl w-8 opacity-80" />
