@@ -16,16 +16,20 @@
 		ContextMenuComponent,
 		ModalComponent,
 		Modal,
-
 		type NodeEditorSaveData
-
 	} from '@selenite/graph-editor';
 	import '../app.css';
-	import { faEllipsisH, faPlus, faTimes, faExternalLinkAlt, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faEllipsisH,
+		faPlus,
+		faTimes,
+		faExternalLinkAlt,
+		faCaretDown
+	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import ThemeSelector from '$lib/ThemeSelector.svelte';
 	import { flip } from 'svelte/animate';
-	import {createFloatingActions } from 'svelte-floating-ui';
+	import { createFloatingActions } from 'svelte-floating-ui';
 	import { offset } from 'svelte-floating-ui/core';
 	let { children } = $props();
 
@@ -65,7 +69,8 @@
 			geosSchema = schema;
 		});
 	});
-	const [ specialAddRef, specialAddPopup  ] = createFloatingActions({middleware: [offset(5)],
+	const [specialAddRef, specialAddPopup] = createFloatingActions({
+		middleware: [offset({ crossAxis: 1 })],
 		placement: 'bottom-start'
 	});
 </script>
@@ -75,12 +80,17 @@
 {/snippet}
 
 {#if tabs.additionalAddPopupVisible && tabs.additionalAddBtn}
-{@const btn = tabs.additionalAddBtn}
-<div role="menu" tabindex="-1" use:specialAddPopup use:takeFocus={true} use:handleFocusLeave={() => tabs.additionalAddPopupVisible = false}
-	class="z-50 bg-neutral p-2 rounded-box flex gap-2 flex-col"
+	{@const btn = tabs.additionalAddBtn}
+	<div
+		role="menu"
+		tabindex="-1"
+		use:specialAddPopup
+		use:takeFocus={true}
+		use:handleFocusLeave={() => (tabs.additionalAddPopupVisible = false)}
+		class="z-50 bg-neutral p-2 rounded-box flex gap-2 flex-col rounded-tl-none"
 	>
-	{@render btn.snippet()}
-</div>
+		{@render btn.snippet()}
+	</div>
 {/if}
 
 <div
@@ -165,33 +175,54 @@
 				</div>
 			{/each}
 			{#if tabs.defaultAddCallback}
-			<button class="tab hover btn-ghost" onclick={(e) => tabs.defaultAddCallback()}
-				><Fa icon={faPlus} /></button
-			>
+				<button class="tab hover btn-ghost" onclick={(e) => tabs.defaultAddCallback()}
+					><Fa icon={faPlus} /></button
+				>
 			{/if}
 			{#if tabs.additionalAddBtn}
-			{@const btn = tabs.additionalAddBtn}
-			<button class="tab hover btn-ghost !ps-2 !pe-2" onfocus={() => btn.prefetch?.()} onpointerenter={() => btn.prefetch?.()} onkeydown={(e) => { if (e.key === "Enter") tabs.additionalAddPopupVisible = !tabs.additionalAddPopupVisible}}  onpointerdown={(e) => tabs.additionalAddPopupVisible = !tabs.additionalAddPopupVisible} use:specialAddRef
-				><Fa icon={faCaretDown} size="sm" /></button
-			>
+				{@const btn = tabs.additionalAddBtn}
+				<button
+					class:tab-active={tabs.additionalAddPopupVisible}
+					class:!bg-neutral={tabs.additionalAddPopupVisible}
+					class="tab hover btn-ghost !ps-2 !pe-2"
+					onfocus={() => btn.prefetch?.()}
+					onpointerenter={() => btn.prefetch?.()}
+					onkeydown={(e) => {
+						if (e.key === 'Enter') tabs.additionalAddPopupVisible = !tabs.additionalAddPopupVisible;
+					}}
+					onpointerdown={(e) => (tabs.additionalAddPopupVisible = !tabs.additionalAddPopupVisible)}
+					use:specialAddRef><Fa icon={faCaretDown} size="sm" /></button
+				>
 			{/if}
 		</div>
 		<div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center z-10">
-			<Fa icon={faEllipsisH} class="group-hover:opacity-0 transition-all  h-full text-4xl w-8 opacity-80" />
+			<Fa
+				icon={faEllipsisH}
+				class="group-hover:opacity-0 transition-all  h-full text-4xl w-8 opacity-80"
+			/>
 			<nav
 				class="h-full bg-base-300 pe-2 flex items-center gap-5 pointer-events-none group-hover:pointer-events-auto translate-x-20 group-hover:translate-x-0 group-focus-within:translate-x-0 absolute top-0 right-0 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-all"
 			>
-			{#snippet Link({ href, text}: { href: string, text: string})}
-				<a {href} class="text-nowrap text-sm link-hover flex items-center gap-2">
-					{text} 
-					{#if href.includes('http')}
-						<Fa icon={faExternalLinkAlt} size="sm" />
-					{/if}
-				</a>
-			{/snippet}
-			{@render Link({href: "https://geosx-geosx.readthedocs-hosted.com/en/latest/", text:"GEOS Docs"})}
-			{@render Link({href:"https://selenite-geos.github.io/docs/advanced-interface/introduction/", text:"Docs"})}
-			{@render Link({href:"https://selenite-geos.github.io/simplified-interface", text:"Simplified"})}
+				{#snippet Link({ href, text }: { href: string; text: string })}
+					<a {href} class="text-nowrap text-sm link-hover flex items-center gap-2">
+						{text}
+						{#if href.includes('http')}
+							<Fa icon={faExternalLinkAlt} size="sm" />
+						{/if}
+					</a>
+				{/snippet}
+				{@render Link({
+					href: 'https://geosx-geosx.readthedocs-hosted.com/en/latest/',
+					text: 'GEOS Docs'
+				})}
+				{@render Link({
+					href: 'https://selenite-geos.github.io/docs/advanced-interface/introduction/',
+					text: 'Docs'
+				})}
+				{@render Link({
+					href: 'https://selenite-geos.github.io/simplified-interface',
+					text: 'Simplified'
+				})}
 				<!-- <a href="/graph-editor" class="text-nowrap">Graph Editor</a> -->
 				<!-- <a href="/graph-viewer" class="text-nowrap">Graph Viewer</a> -->
 				<ThemeSelector class="select-sm" />
