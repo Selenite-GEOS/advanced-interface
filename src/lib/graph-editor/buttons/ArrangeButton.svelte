@@ -2,7 +2,6 @@
 	import { faGem } from '@fortawesome/free-solid-svg-icons';
 	import EditorButton from '../EditorButton.svelte';
 	import { ArrangeAppliers } from 'rete-auto-arrange-plugin';
-	import { AreaExtensions } from 'rete-area-plugin';
 	import type { Schemes, AreaExtra } from '@selenite/graph-editor';
 	import { cubicInOut } from 'svelte/easing';
 </script>
@@ -22,7 +21,7 @@
 			onTick(t) {
 				if (firstTick) {
 					firstTick = true;
-					AreaExtensions.zoomAt(area, factory.getEditor().getNodes());
+					factory.focusNodes()
 				}
 			},
 			duration: 500,
