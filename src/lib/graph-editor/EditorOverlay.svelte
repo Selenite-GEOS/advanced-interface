@@ -1,5 +1,6 @@
 <script lang="ts">
-	import ArrangeButton from './buttons/ArrangeButton.svelte';
+	import { VariablesListComponent } from '@selenite/graph-editor';
+import ArrangeButton from './buttons/ArrangeButton.svelte';
 	import CenterViewButton from './buttons/CenterViewButton.svelte';
 	import ClearButton from './buttons/ClearButton.svelte';
 	import CodeEditorButton from './buttons/CodeEditorButton.svelte';
@@ -47,9 +48,9 @@
 		</Toolbar>
 	</div>
 	<div class="flex items-end">
-		<EditorButton />
+		<VariablesListComponent />
 	</div>
 	<div class="flex justify-end items-end">
-		<EditorButton />
+		<!-- <EditorButton /> -->
 	</div>
 </div>
