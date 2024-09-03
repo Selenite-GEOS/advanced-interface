@@ -6,14 +6,15 @@
 	import UpdateGraphModal from '../data/UpdateGraphModal.svelte';
 
 	function createMacroBlock(factory: NodeFactory) {
-		Modal.instance.show({
-			component: UpdateGraphModal,
-			props: {},
-			buttons: ['cancel'],
-			get title() {
-				return `Update macro block ${factory.editor.graphName}`;
-			}
-		});
+		factory.openGraphForm()
+		// Modal.instance.show({
+		// 	component: UpdateGraphModal,
+		// 	props: {},
+		// 	buttons: ['cancel'],
+		// 	get title() {
+		// 		return `Update macro block ${factory.editor.graphName}`;
+		// 	}
+		// });
 	}
 </script>
 
