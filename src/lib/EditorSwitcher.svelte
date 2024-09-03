@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Editor from './graph-editor/Editor.svelte';
 	import { getContext, persisted, setContext } from '$lib';
-	import { newUuid, type SaveData } from '@selenite/commons';
+	import { newUuid, shortcut, type SaveData } from '@selenite/commons';
 	import type { NodeEditor, NodeEditorSaveData, NodeFactory } from '@selenite/graph-editor';
 	import { SvelteSet } from 'svelte/reactivity';
 	import EditorOverlay from './graph-editor/EditorOverlay.svelte';
@@ -86,8 +86,13 @@
 		},
 		set displayCodeEditor(value: boolean) {
 			$displayCodeEditor = value;
-		}
+		},
+		openNewEditor(data) {
+			addEditor(undefined, data);
+		},
 	});
+	const editorContext = getContext('editor');
+	const activeFactory = $derived(editorContext.activeFactory)
 	let memo_examples: NodeEditorSaveData[] | undefined = undefined;
 	async function getExamples(): Promise<NodeEditorSaveData[]> {
 		if (!memo_examples) {
@@ -126,7 +131,10 @@
 	<aside class="h-full bg-base-200">
 		<GraphBrowser />
 	</aside>
-	<div class="h-full relative">
+	<div class="h-full relative" use:shortcut={{key:'a', ctrl: true, action:() => {
+		console.log("yo", activeFactory)
+		activeFactory?.selectAll();
+	}}}>
 		<EditorOverlay class="absolute top-0 z-10 w-full h-full" />
 		{#each Object.keys(factories) as id (id)}
 			{#if !deleted.has(id)}

@@ -8,7 +8,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import { fade, slide } from 'svelte/transition';
-	import { persisted } from './global';
+	import { getContext, persisted } from './global';
 	import { NodeStorage, onGraphDragStart, type NodeEditorSaveData } from '@selenite/graph-editor';
 	import { resizable, shortcut } from '@selenite/commons';
 
@@ -20,7 +20,7 @@
 	// $effect(() => {
 	//     $saved = selected;
 	// })
-
+	const editorContext = getContext('editor')
 	function onclick(id: string) {
 		if (id === selected) {
 			selected = null;
@@ -71,7 +71,9 @@
 						class="w-[7.5rem] sm:w-[13.5rem] md:w-[21rem] lg:w-[28rem] grid place-content-start justify-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-clip overflow-y-auto scrollbar-thin px-2"
 					>
 						{#snippet Library(graph: typeof NodeStorage.graphs[number])}
-							<article class="flex flex-col items-center cursor-pointer" in:fade out:fade={{ duration: 50 }} draggable="true" ondragstart={onGraphDragStart(graph)}>
+							<article class="flex flex-col items-center cursor-pointer" in:fade out:fade={{ duration: 50 }} draggable="true" ondragstart={onGraphDragStart(graph)} ondblclick={() => {
+								editorContext.openNewEditor(graph.graph);
+							}}>
 								<div
 									class="w-[5.95rem] h-[5.95rem] bg-base-300 rounded-box select-none mb-1 overflow-clip"
 								>

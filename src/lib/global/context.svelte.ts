@@ -1,6 +1,6 @@
 import type { Tabs } from '$lib/tabs.svelte';
 import { XmlSchema } from '@selenite/commons';
-import type { NodeFactory } from '@selenite/graph-editor';
+import type { NodeEditorSaveData, NodeFactory } from '@selenite/graph-editor';
 import { getContext as baseGetContext, setContext as baseSetContext } from 'svelte';
 
 export class GeosContext {
@@ -21,6 +21,7 @@ export type Contexts = {
 		factories: NodeFactory[];
 		activeFactory?: NodeFactory;
 		displayCodeEditor: boolean;
+		openNewEditor: (data?: NodeEditorSaveData) => void;
 	};
 	geos: GeosContext;
 };

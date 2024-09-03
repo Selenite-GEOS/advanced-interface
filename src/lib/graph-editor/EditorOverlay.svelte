@@ -14,6 +14,9 @@ import ArrangeButton from './buttons/ArrangeButton.svelte';
 	import UndoButton from './buttons/UndoButton.svelte';
 	import EditorButton from './EditorButton.svelte';
 	import Toolbar from './Toolbar.svelte';
+	import SearchButton from './buttons/SearchButton.svelte';
+	import BoxSelectionButton from './buttons/selection/BoxSelectionButton.svelte';
+	import InvertSelectionButton from './buttons/selection/InvertSelectionButton.svelte';
 
 	type Props = {
 		class?: string;
@@ -38,6 +41,9 @@ import ArrangeButton from './buttons/ArrangeButton.svelte';
 	</div>
 	<div class="grid justify-end place-content-start gap-2">
 		<Toolbar class="justify-end">
+			<SearchButton />
+			<BoxSelectionButton />
+			<InvertSelectionButton />
 			<ArrangeButton />
 			<CenterViewButton />
 			<FullscreenButton />
