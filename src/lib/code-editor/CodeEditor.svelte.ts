@@ -10,7 +10,7 @@ export interface ICodeEditor {
 	setLightTheme(light: boolean): void;
 	getText(): { text: string; cursorOffset: number | null } | undefined;
 	setText(params: { text: string; cursorOffset?: number | null, history?: boolean }): void;
-	setup_(params: { container: HTMLElement }): void;
+	setup_(params: { container: HTMLElement, model?: Model }): void;
 	getSelectedText(): string;
 }
 
@@ -19,7 +19,7 @@ export type codeEditorBackends = 'monaco';
 export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema: XmlSchema}): {
 	codeEditor: ICodeEditor | undefined;
 	codeEditorPromise: Promise<ICodeEditor>;
-	codeEditorAction: Action<HTMLDivElement>;
+	codeEditorAction: Action<HTMLDivElement, Model | undefined>;
 } {
 	const codeEditorPromise = createCodeEditor(params);
 	let resolvePostSetupEditorPromise: (value: ICodeEditor) => void;
@@ -35,9 +35,10 @@ export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema
 			codeEditor = value;
 		},
 		codeEditorPromise,
-		codeEditorAction: (node) => {
+		codeEditorAction: (node, model?: Model) => {
 			codeEditorPromise.then((editor) => {
-				editor.setup_({ container: node });
+				editor.setup_({ container: node, model });
+				// editor.activeModel = model;
 				resolvePostSetupEditorPromise(editor);
 				codeEditor = editor;
 			});

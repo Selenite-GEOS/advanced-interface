@@ -159,13 +159,14 @@ export default class MonacoCodeEditor implements ICodeEditor {
 		this.monaco.editor.setTheme(light ? 'vs' : 'vs-dark');
 	}
 
-	public setup_(params: { container: HTMLElement }) {
+	public setup_(params: { container: HTMLElement, model?: Monaco.editor.ITextModel }): void {
 		// Your monaco instance is ready, let's display some code!
 		this.editor = this.monaco.editor.create(params.container, {
 			fixedOverflowWidgets: true,
 			automaticLayout: true,
 			dragAndDrop: true,
-			dropIntoEditor: { enabled: true }
+			dropIntoEditor: { enabled: true },
+			model: params.model
 		});
 		this.editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyL, () => {
 			document.dispatchEvent(new KeyboardEvent('keydown', { key: 'l', ctrlKey: true, code: 'KeyL' }));

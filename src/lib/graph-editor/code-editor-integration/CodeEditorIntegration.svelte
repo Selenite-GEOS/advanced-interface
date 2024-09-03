@@ -11,15 +11,16 @@
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
 	import { _, persisted } from '$lib/global';
-	import { formatXml, shortcut, resizable } from '@selenite/commons';
+	import { formatXml, shortcut, resizable, animationFrame, sleep } from '@selenite/commons';
 	import { type Node } from '@selenite/graph-editor';
-	import { untrack } from 'svelte';
+	import { tick, untrack } from 'svelte';
 
 	import { get } from 'svelte/store';
 	import { getContext } from '$lib/global';
 	import CodeEditorIntegrationButton from './CodeEditorIntegrationButton.svelte';
 	import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 	import { fade, slide } from 'svelte/transition';
+	import type { Model } from '$lib/code-editor/CodeEditor.svelte';
 	// import type { XmlAttributeDefinition } from "@sel";
 	const editorContext = getContext('editor');
 	const geosContext = getContext('geos');
@@ -194,12 +195,26 @@
 		updateLivePreview() {
 			if (!codeEditor) return;
 			codeEditor.activeModel = this.active ? this.model : codeEditorCmpnt?.getModel();
+			reloadModel = codeEditor.activeModel;
 			codeEditor.readonly = this.active;
 		}
 	}
+	let reloadModel = $state<Model>();
 	const livePreview = new LivePreview();
 	let visible = $state(true);
 	let width = persisted<number | undefined>('code-integration-width', undefined);
+
+	// Reload code editor when exiting full screen to avoid a bug where it keeps the size of full screen
+	$effect(() => {
+		document.addEventListener('fullscreenchange', async () => {
+			if (document.fullscreenElement) return;
+			visible = false;
+			await tick();
+			await animationFrame();
+			await sleep(500);
+			visible = true;
+		});
+	});
 </script>
 
 {#await codeEditorPromise then}
@@ -231,6 +246,7 @@
 			width={$width}
 			downloadAvailable={!livePreview.active || livePreview.valid}
 			textToDownload={livePreview.xml}
+			{reloadModel}
 		>
 			{#snippet additionalButtons()}
 				<label

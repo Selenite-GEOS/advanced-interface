@@ -20,13 +20,15 @@
 		/** Whether download is available. Defaults to true. */
 		downloadAvailable?: boolean;
 		textToDownload?: string;
+		reloadModel?: Model;
 	};
 	let {
 		visible = true,
 		width,
 		additionalButtons,
 		downloadAvailable = true,
-		textToDownload
+		textToDownload,
+		reloadModel
 	}: Props = $props();
 	const text = persisted('codeEditorText', '<?xml version="1.0"?>\n\n<Problem>\n  \n</Problem>');
 
@@ -218,7 +220,7 @@
 		<div class="w-full flex justify-center p-2">Loading...</div>
 		{:then}
 		{#if codeEditorAction && visible}
-			<div class="h-full" style="width: {width}px;" use:codeEditorAction transition:fade={{ duration: 100 }}></div>
+			<div class="h-full" style="width: {width}px;" use:codeEditorAction={reloadModel} transition:fade={{ duration: 100 }}></div>
 		{/if}
 	{:catch}
 		<div class="absolute top-0 h-full flex flex-col justify-center align-middle">
