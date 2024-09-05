@@ -9,14 +9,14 @@ export interface ICodeEditor {
 	readonly: boolean;
 	setLightTheme(light: boolean): void;
 	getText(): { text: string; cursorOffset: number | null } | undefined;
-	setText(params: { text: string; cursorOffset?: number | null, history?: boolean }): void;
-	setup_(params: { container: HTMLElement, model?: Model }): void;
+	setText(params: { text: string; cursorOffset?: number | null; history?: boolean }): void;
+	setup_(params: { container: HTMLElement; model?: Model }): void;
 	getSelectedText(): string;
 }
 
 export type codeEditorBackends = 'monaco';
 
-export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema: XmlSchema}): {
+export function makeCodeEditor(params: { backend: codeEditorBackends; geosSchema: XmlSchema }): {
 	codeEditor: ICodeEditor | undefined;
 	codeEditorPromise: Promise<ICodeEditor>;
 	codeEditorAction: Action<HTMLDivElement, Model | undefined>;

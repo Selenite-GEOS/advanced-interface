@@ -8,10 +8,13 @@
 		flip?: 'horizontal' | 'vertical' | 'both';
 		onclick?: () => void;
 	}
-	
-	let {icon, flip, onclick}: Props = $props();	
+
+	let { icon, flip, onclick }: Props = $props();
 </script>
 
-<button class="btn btn-icon-sm variant-filled-primary pointer-events-auto" use:clickIfNoDrag={{onclick}}>
+<button
+	class="btn btn-icon-sm variant-filled-primary pointer-events-auto"
+	use:clickIfNoDrag={{ onclick }}
+>
 	<Fa {icon} {flip} />
 </button>

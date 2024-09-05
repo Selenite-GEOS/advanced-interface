@@ -83,8 +83,8 @@ export class Tabs {
 
 	defaultAddCallback = $state<() => void>(() => this.add());
 
-	additionalAddBtn = $state<{ snippet: Snippet, prefetch?:() => void}>()
-	additionalAddPopupVisible = $state(false)
+	additionalAddBtn = $state<{ snippet: Snippet; prefetch?: () => void }>();
+	additionalAddPopupVisible = $state(false);
 
 	toJSON() {
 		return {

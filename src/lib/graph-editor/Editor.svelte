@@ -27,7 +27,7 @@
 		if (!container || !geosContext.schema) return;
 		untrack(() => {
 			setup();
-		})
+		});
 
 		return () => {
 			factory?.destroyArea();

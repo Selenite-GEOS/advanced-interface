@@ -5,17 +5,13 @@
 <EditorButton
 	label="Invert Selection"
 	description="Invert the selection."
-    shortcut="i"
+	shortcut="i"
 	activeFactoryAction={async (factory) => {
 		factory.selector.invertSelection();
 	}}
 >
 	{#snippet icon()}
-		<svg
-			viewBox="0 0 200 200"
-            class="w-2/5"
-			xmlns="http://www.w3.org/2000/svg"
-		>
+		<svg viewBox="0 0 200 200" class="w-2/5" xmlns="http://www.w3.org/2000/svg">
 			<g>
 				<path
 					id="rect1"

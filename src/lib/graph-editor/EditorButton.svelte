@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { getContext } from '$lib/global';
 	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
-	import { shortcut, shortcutToString, type KeyboardShortcut, type ShortcutSettings } from '@selenite/commons';
+	import {
+		shortcut,
+		shortcutToString,
+		type KeyboardShortcut,
+		type ShortcutSettings
+	} from '@selenite/commons';
 	import { contextMenu, type NodeFactory } from '@selenite/graph-editor';
 	import { upperFirst } from 'lodash-es';
 	import type { Snippet } from 'svelte';
@@ -54,8 +59,16 @@
 		}
 	}
 	const trimmedDescr = $derived(description ? description.trim() : '');
-	const preppedDescr = $derived((trimmedDescr ? upperFirst(trimmedDescr.endsWith('.') ? trimmedDescr : trimmedDescr + '.') : upperFirst(label.trim())).replaceAll('\\n', '\n'));
-	const title = $derived(preppedDescr + (shortcutDef ? `\n(${shortcutDef.map(s => shortcutToString(s)).join(', ')})` : ''))
+	const preppedDescr = $derived(
+		(trimmedDescr
+			? upperFirst(trimmedDescr.endsWith('.') ? trimmedDescr : trimmedDescr + '.')
+			: upperFirst(label.trim())
+		).replaceAll('\\n', '\n')
+	);
+	const title = $derived(
+		preppedDescr +
+			(shortcutDef ? `\n(${shortcutDef.map((s) => shortcutToString(s)).join(', ')})` : '')
+	);
 </script>
 
 <button

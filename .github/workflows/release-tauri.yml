@@ -13,7 +13,7 @@ on:
         'svelte.config.js',
         'tailwind.config.js',
         'vite.config.js',
-        'postcss.config.js',
+        'postcss.config.js'
       ]
     branches:
       - main

@@ -6,16 +6,16 @@
 </script>
 
 <div class="tooltip tooltip-bottom" data-tip="Theme (R, T)">
-<select
-	bind:value={themeControl.theme}
-	{...props}
-	class="select select-bordered text-base-content {props.class}"
-	use:shortcut={{ key: 't', action: () => (themeControl.theme = themeControl.nextTheme) }}
-	use:shortcut={{ key: 'r', action: () => (themeControl.theme = themeControl.previousTheme) }}
->
-	<option value="">Default</option>
-	{#each themeControl.themes as theme}
-		<option value={theme}>{capitalize(theme)}</option>
-	{/each}
-</select>
+	<select
+		bind:value={themeControl.theme}
+		{...props}
+		class="select select-bordered text-base-content {props.class}"
+		use:shortcut={{ key: 't', action: () => (themeControl.theme = themeControl.nextTheme) }}
+		use:shortcut={{ key: 'r', action: () => (themeControl.theme = themeControl.previousTheme) }}
+	>
+		<option value="">Default</option>
+		{#each themeControl.themes as theme}
+			<option value={theme}>{capitalize(theme)}</option>
+		{/each}
+	</select>
 </div>

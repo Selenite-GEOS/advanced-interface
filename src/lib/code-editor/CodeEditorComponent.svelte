@@ -50,7 +50,7 @@
 		geosSchema
 			? makeCodeEditor({
 					backend: 'monaco',
-					geosSchema,
+					geosSchema
 				})
 			: undefined
 	);
@@ -164,7 +164,7 @@
 				...shortcutDef,
 				ignoreElements: [],
 				action(node, e) {
-					if (!codeEditor || disabled || unavailable)	return;
+					if (!codeEditor || disabled || unavailable) return;
 					onclick?.(e);
 				}
 			}}
@@ -196,7 +196,7 @@
 			label: 'Clear',
 			onclick: clear,
 			needWritable: true,
-			descr: 'Clear the editor.',
+			descr: 'Clear the editor.'
 		})}
 		<input
 			type="text"
@@ -218,9 +218,14 @@
 <div class="transition-colors overflow grid">
 	{#await codeEditorPromise}
 		<div class="w-full flex justify-center p-2">Loading...</div>
-		{:then}
+	{:then}
 		{#if codeEditorAction && visible}
-			<div class="h-full" style="width: {width}px;" use:codeEditorAction={reloadModel ?? model} transition:fade={{ duration: 100 }}></div>
+			<div
+				class="h-full"
+				style="width: {width}px;"
+				use:codeEditorAction={reloadModel ?? model}
+				transition:fade={{ duration: 100 }}
+			></div>
 		{/if}
 	{:catch}
 		<div class="absolute top-0 h-full flex flex-col justify-center align-middle">

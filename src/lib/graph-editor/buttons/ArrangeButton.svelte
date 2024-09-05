@@ -9,8 +9,8 @@
 <EditorButton
 	icon={faGem}
 	shortcut="a"
-    label="Arrange nodes"
-    description="Arrange all nodes in the graph."
+	label="Arrange nodes"
+	description="Arrange all nodes in the graph."
 	activeFactoryAction={(factory) => {
 		const selectedNodesIds = new Set(factory.selector.nodes.map((n) => n.id));
 		if (selectedNodesIds) console.log('arranging nodes', selectedNodesIds);
@@ -21,7 +21,7 @@
 			onTick(t) {
 				if (firstTick) {
 					firstTick = true;
-					factory.focusNodes()
+					factory.focusNodes();
 				}
 			},
 			duration: 500,
@@ -34,7 +34,7 @@
 				return !selectedNodesIds || selectedNodesIds.has(id);
 			}
 		});
-        // @ts-expect-error
+		// @ts-expect-error
 		factory.arrange?.layout({ applier });
 	}}
 />

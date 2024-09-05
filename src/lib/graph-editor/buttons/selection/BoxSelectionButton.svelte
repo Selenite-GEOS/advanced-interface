@@ -4,7 +4,7 @@
 
 	const editorContext = getContext('editor');
 
-	const enabled = $derived(editorContext.activeFactory?.selection.boxSelectionEnabled ?? false)
+	const enabled = $derived(editorContext.activeFactory?.selection.boxSelectionEnabled ?? false);
 </script>
 
 <EditorButton
@@ -13,10 +13,13 @@
 	shortcut="b"
 	class={enabled ? 'btn-success' : ''}
 	activeFactoryAction={async (factory) => {
-		factory.selection.boxSelectionEnabled = !factory.selection.boxSelectionEnabled
+		factory.selection.boxSelectionEnabled = !factory.selection.boxSelectionEnabled;
 	}}
 >
 	{#snippet icon()}
-		<div class="border-base-content w-4 h-4 border-dashed border-[0.12rem] border-opacity-90" class:!border-success-content={enabled} ></div>
+		<div
+			class="border-base-content w-4 h-4 border-dashed border-[0.12rem] border-opacity-90"
+			class:!border-success-content={enabled}
+		></div>
 	{/snippet}
 </EditorButton>

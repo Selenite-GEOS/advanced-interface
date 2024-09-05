@@ -8,7 +8,9 @@
 
 	const context = getContext('editor');
 	const factory = $derived(context.activeFactory);
-	const canRedo: Readable<boolean> = $derived(factory?.history ? factory.history.canRedo : readable(false));
+	const canRedo: Readable<boolean> = $derived(
+		factory?.history ? factory.history.canRedo : readable(false)
+	);
 </script>
 
 <SmallEditorButton
@@ -20,6 +22,6 @@
 	activeFactoryAction={(factory) => {
 		factory.bulkOperation(() => {
 			factory.history?.redo();
-		})
+		});
 	}}
 />

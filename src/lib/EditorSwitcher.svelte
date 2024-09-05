@@ -89,10 +89,10 @@
 		},
 		openNewEditor(data) {
 			addEditor(undefined, data);
-		},
+		}
 	});
 	const editorContext = getContext('editor');
-	const activeFactory = $derived(editorContext.activeFactory)
+	const activeFactory = $derived(editorContext.activeFactory);
 	let memo_examples: NodeEditorSaveData[] | undefined = undefined;
 	async function getExamples(): Promise<NodeEditorSaveData[]> {
 		if (!memo_examples) {
@@ -131,10 +131,17 @@
 	<aside class="h-full bg-base-200">
 		<GraphBrowser />
 	</aside>
-	<div class="h-full relative" use:shortcut={{key:'a', ctrl: true, action:() => {
-		console.log("yo", activeFactory)
-		activeFactory?.selectAll();
-	}}}>
+	<div
+		class="h-full relative"
+		use:shortcut={{
+			key: 'a',
+			ctrl: true,
+			action: () => {
+				console.log('yo', activeFactory);
+				activeFactory?.selectAll();
+			}
+		}}
+	>
 		<EditorOverlay class="absolute top-0 z-10 w-full h-full" />
 		{#each Object.keys(factories) as id (id)}
 			{#if !deleted.has(id)}

@@ -11,5 +11,4 @@ export function persisted<T>(
 	return basePersisted<T>('selenite-graph-' + key, initialValue, options);
 }
 
-
 export const _ = readable((s: string) => s);

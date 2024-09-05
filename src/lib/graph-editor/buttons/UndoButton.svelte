@@ -20,6 +20,6 @@
 	activeFactoryAction={(factory) => {
 		factory.bulkOperation(() => {
 			factory?.history?.undo();
-		})
+		});
 	}}
 />

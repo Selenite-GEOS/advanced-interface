@@ -48,9 +48,12 @@
 			window.focus();
 			if (document.fullscreenElement === null) {
 				try {
-				await document.documentElement.requestFullscreen();
+					await document.documentElement.requestFullscreen();
 				} catch (e) {
-					notifications.warn({message: "Can't enter fullscreen right now, try interacting with the page first.", title: 'Fullscreen'})
+					notifications.warn({
+						message: "Can't enter fullscreen right now, try interacting with the page first.",
+						title: 'Fullscreen'
+					});
 				}
 			} else {
 				await document.exitFullscreen();

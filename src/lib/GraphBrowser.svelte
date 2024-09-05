@@ -20,7 +20,7 @@
 	// $effect(() => {
 	//     $saved = selected;
 	// })
-	const editorContext = getContext('editor')
+	const editorContext = getContext('editor');
 	function onclick(id: string) {
 		if (id === selected) {
 			selected = null;
@@ -64,16 +64,25 @@
 				<input type="search" class="w-full" placeholder="Search" />
 				<Fa icon={faSearch} class="hidden opacity-80 sm:block" />
 			</label>
-			<h2 class="font-bold text-xl mb-2 px-2 text-nowrap truncate">Macro Blocks ({NodeStorage.numGraphs})</h2>
+			<h2 class="font-bold text-xl mb-2 px-2 text-nowrap truncate">
+				Macro Blocks ({NodeStorage.numGraphs})
+			</h2>
 			<div class="mb-2 grow relative">
 				<div class="absolute inset-0 max-h-full flex justify-center">
 					<section
 						class="w-[7.5rem] sm:w-[13.5rem] md:w-[21rem] lg:w-[28rem] grid place-content-start justify-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-clip overflow-y-auto scrollbar-thin px-2"
 					>
-						{#snippet Library(graph: typeof NodeStorage.graphs[number])}
-							<article class="flex flex-col items-center cursor-pointer" in:fade out:fade={{ duration: 50 }} draggable="true" ondragstart={onGraphDragStart(graph)} ondblclick={() => {
-								editorContext.openNewEditor(graph.graph);
-							}}>
+						{#snippet Library(graph: (typeof NodeStorage.graphs)[number])}
+							<article
+								class="flex flex-col items-center cursor-pointer"
+								in:fade
+								out:fade={{ duration: 50 }}
+								draggable="true"
+								ondragstart={onGraphDragStart(graph)}
+								ondblclick={() => {
+									editorContext.openNewEditor(graph.graph);
+								}}
+							>
 								<div
 									class="w-[5.95rem] h-[5.95rem] bg-base-300 rounded-box select-none mb-1 overflow-clip"
 								>

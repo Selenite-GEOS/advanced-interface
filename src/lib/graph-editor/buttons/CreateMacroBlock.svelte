@@ -6,7 +6,7 @@
 	import UpdateGraphModal from '../data/UpdateGraphModal.svelte';
 
 	function createMacroBlock(factory: NodeFactory) {
-		factory.openGraphForm()
+		factory.openGraphForm();
 		// Modal.instance.show({
 		// 	component: UpdateGraphModal,
 		// 	props: {},
@@ -18,7 +18,12 @@
 	}
 </script>
 
-<EditorButton activeFactoryAction={createMacroBlock} shortcut={["c", "u"]} description="create or update a macro block" label="Create Macro Block">
+<EditorButton
+	activeFactoryAction={createMacroBlock}
+	shortcut={['c', 'u']}
+	description="create or update a macro block"
+	label="Create Macro Block"
+>
 	{#snippet icon()}
 		<FaLayers>
 			<Fa icon={faCube} translateX={-0.3} translateY={0.2} />
