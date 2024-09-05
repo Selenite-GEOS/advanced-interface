@@ -15,6 +15,7 @@
     const editorContext = getContext('editor');
     const factory = $derived(editorContext.activeFactory)
 
+    // TODO: Optimize so that only active factory is updated
     $effect(() => {
         if (!factory || !search) return;
         untrack(() => {
