@@ -4,7 +4,8 @@ import scrollbar from 'tailwind-scrollbar';
 export default {
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
-		'./node_modules/@selenite/graph-editor/dist/**/*.{html,js,svelte,ts}'
+		'./node_modules/@selenite/graph-editor/dist/**/*.{html,js,svelte,ts}',
+		'./node_modules/@selenite/commons/dist/**/*.{html,js,svelte,ts}'
 	],
 	theme: {
 		extend: {}

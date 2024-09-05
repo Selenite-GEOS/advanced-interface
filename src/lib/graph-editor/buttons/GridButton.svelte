@@ -33,6 +33,7 @@
 
 <SmallEditorButton
 	label="Grid"
+	description="Toggle the grid."
 	shortcut="g"
 	icon={faTableCells}
 	class={$isGridDisplayed ? '' : 'text-opacity-50'}

@@ -4,7 +4,7 @@
 
 <EditorButton
 	label="Invert Selection"
-	description="Invert the current selection."
+	description="Invert the selection."
     shortcut="i"
 	activeFactoryAction={async (factory) => {
 		factory.selector.invertSelection();

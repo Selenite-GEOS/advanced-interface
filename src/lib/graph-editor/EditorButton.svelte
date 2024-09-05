@@ -15,6 +15,7 @@
 		description?: string;
 		activeFactoryAction?: (factory: NodeFactory) => void;
 		shortcut?: string | string[];
+		shortcutInInput?: boolean;
 	} & HTMLButtonAttributes;
 
 	let {
@@ -23,6 +24,7 @@
 		icon,
 		description,
 		shortcut: shortcutStr,
+		shortcutInInput = false,
 		...props
 	}: Props = $props();
 	const editorContext = getContext('editor');
@@ -62,6 +64,7 @@
 	{...props}
 	class:btn-circle={displayIcon}
 	use:shortcut={{
+		ignoreElements: shortcutInInput ? [] : undefined,
 		shortcuts: shortcutDef,
 		action(node, e) {
 			if (contextMenu.visible) return;

@@ -220,7 +220,7 @@
 		<div class="w-full flex justify-center p-2">Loading...</div>
 		{:then}
 		{#if codeEditorAction && visible}
-			<div class="h-full" style="width: {width}px;" use:codeEditorAction={reloadModel} transition:fade={{ duration: 100 }}></div>
+			<div class="h-full" style="width: {width}px;" use:codeEditorAction={reloadModel ?? model} transition:fade={{ duration: 100 }}></div>
 		{/if}
 	{:catch}
 		<div class="absolute top-0 h-full flex flex-col justify-center align-middle">

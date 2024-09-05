@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { VariablesListComponent } from '@selenite/graph-editor';
-import ArrangeButton from './buttons/ArrangeButton.svelte';
+	import { MiniMap, VariablesListComponent } from '@selenite/graph-editor';
+	import ArrangeButton from './buttons/ArrangeButton.svelte';
 	import CenterViewButton from './buttons/CenterViewButton.svelte';
 	import ClearButton from './buttons/ClearButton.svelte';
 	import CodeEditorButton from './buttons/CodeEditorButton.svelte';
@@ -17,6 +17,7 @@ import ArrangeButton from './buttons/ArrangeButton.svelte';
 	import SearchButton from './buttons/SearchButton.svelte';
 	import BoxSelectionButton from './buttons/selection/BoxSelectionButton.svelte';
 	import InvertSelectionButton from './buttons/selection/InvertSelectionButton.svelte';
+	import MinimapButton from './buttons/MinimapButton.svelte';
 
 	type Props = {
 		class?: string;
@@ -41,16 +42,19 @@ import ArrangeButton from './buttons/ArrangeButton.svelte';
 	</div>
 	<div class="grid justify-end place-content-start gap-2">
 		<Toolbar class="justify-end">
-			<SearchButton />
-			<BoxSelectionButton />
-			<InvertSelectionButton />
 			<ArrangeButton />
 			<CenterViewButton />
 			<FullscreenButton />
 			<CodeEditorButton />
 		</Toolbar>
+		<Toolbar class="justify-end">
+			<SearchButton />
+			<BoxSelectionButton />
+			<InvertSelectionButton />
+		</Toolbar>
 		<Toolbar class="justify-end me-2">
 			<GridButton />
+			<MinimapButton />
 		</Toolbar>
 	</div>
 	<div class="flex items-end">
@@ -58,5 +62,6 @@ import ArrangeButton from './buttons/ArrangeButton.svelte';
 	</div>
 	<div class="flex justify-end items-end">
 		<!-- <EditorButton /> -->
+		<MiniMap />
 	</div>
 </div>

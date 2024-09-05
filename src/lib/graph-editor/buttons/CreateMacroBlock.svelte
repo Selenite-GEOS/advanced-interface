@@ -18,7 +18,7 @@
 	}
 </script>
 
-<EditorButton activeFactoryAction={createMacroBlock} shortcut="m" description="create or update a macro block" label="Create Macro Block">
+<EditorButton activeFactoryAction={createMacroBlock} shortcut={["c", "u"]} description="create or update a macro block" label="Create Macro Block">
 	{#snippet icon()}
 		<FaLayers>
 			<Fa icon={faCube} translateX={-0.3} translateY={0.2} />
