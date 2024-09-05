@@ -195,7 +195,7 @@
 				>
 			{/if}
 		</div>
-		<div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center z-10">
+		<div class="group relative lg:ps-[12rem] ps-[4rem] pe-4 self-stretch flex items-center z-20">
 			<Fa
 				icon={faEllipsisH}
 				class="group-hover:opacity-0 transition-all  h-full text-4xl w-8 opacity-80"

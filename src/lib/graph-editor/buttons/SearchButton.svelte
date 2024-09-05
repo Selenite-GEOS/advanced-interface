@@ -16,7 +16,7 @@
     const factory = $derived(editorContext.activeFactory)
 
     $effect(() => {
-        if (!factory) return;
+        if (!factory || !search) return;
         untrack(() => {
             factory.search.query = q;
         })
@@ -26,13 +26,27 @@
     })
     
     let q = $state('');
-    let search = $state(true);
+    let search = $state(false);
     const focus: Action = (node) => node.focus();
+
+    function hideSearch() {
+        search = false;
+        for (const f of editorContext.factories ?? []) {
+            f.search.query = '';
+        }
+    }
+
+    function showSearch() {
+        search = true;
+        for (const f of editorContext.factories ?? []) {
+            f.search.query = q;
+        }
+    }
 </script>
 
 {#if search}
 <aside use:searchPopup class="flex flex-col gap-2 bg-base-200 p-4 rounded-box border border-base-content border-opacity-10" use:shortcut={{key:'escape', ignoreElements:[],  action: () => {
-    search = false;
+    hideSearch()
 }}}>
     <input class="input input-bordered input-secondary pointer-events-auto mb-2" bind:value={q} use:focus placeholder="Search" oninput={(e) => {
         if (!factory) return;
@@ -65,6 +79,11 @@
         shortcut="ctrl+f"
 		description="Search in the graph."
 		icon={faMagnifyingGlass}
-		onclick={() => search = !search}
+		onclick={() => {
+            if (search) 
+                hideSearch();
+            else
+                showSearch();
+        }}
 	/>
 </div>

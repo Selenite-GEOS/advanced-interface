@@ -5,8 +5,8 @@
 	let { ...props }: HTMLSelectAttributes = $props();
 </script>
 
+<div class="tooltip tooltip-bottom" data-tip="Theme (R, T)">
 <select
-	title="Theme"
 	bind:value={themeControl.theme}
 	{...props}
 	class="select select-bordered text-base-content {props.class}"
@@ -18,3 +18,4 @@
 		<option value={theme}>{capitalize(theme)}</option>
 	{/each}
 </select>
+</div>
