@@ -33,6 +33,7 @@
         search = false;
         for (const f of editorContext.factories ?? []) {
             f.search.query = '';
+            f.search.focused = undefined;
         }
     }
 
@@ -50,7 +51,7 @@
 }}}>
     <input class="input input-bordered input-secondary pointer-events-auto mb-2" bind:value={q} use:focus placeholder="Search" oninput={(e) => {
         if (!factory) return;
-        factory.search.query = e.target.value;
+        factory.search.query = e.currentTarget.value;
     }} onkeydown={(e) => {
         if (e.key === 'Enter') {
             if (!factory) return;
