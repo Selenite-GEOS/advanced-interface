@@ -44,6 +44,7 @@
             f.search.query = q;
         }
     }
+    // TODO: Shortcuts for next and previous
 </script>
 
 {#if search}
@@ -56,7 +57,10 @@
     }} onkeydown={(e) => {
         if (e.key === 'Enter') {
             if (!factory) return;
-            factory.search.next();
+            if (e.shiftKey)
+                factory.search.previous();
+            else
+                factory.search.next();
             return;
         }
     }}/>
