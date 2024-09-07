@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { faCube, faCubes, faCubesStacked, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import { faCube, faPlus } from '@fortawesome/free-solid-svg-icons';
 	import EditorButton from '../EditorButton.svelte';
-	import { Modal, type NodeFactory, notifications } from '@selenite/graph-editor';
+	import type { NodeFactory } from '@selenite/graph-editor';
 	import Fa, { FaLayers } from 'svelte-fa';
-	import UpdateGraphModal from '../data/UpdateGraphModal.svelte';
 
 	function createMacroBlock(factory: NodeFactory) {
 		factory.openGraphForm();
