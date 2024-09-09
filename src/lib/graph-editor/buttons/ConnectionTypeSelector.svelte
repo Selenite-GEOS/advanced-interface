@@ -66,7 +66,7 @@
 		{/each}
         </div>
 	{:else}
-        <div class="absolute bg-opacity-50 inset-0 btn btn-sm btn-circle border  stroke-base-content !transition-none z-10">{@render path($connectionPathType, true)}</div>
+        <div class="absolute bg-opacity-50 inset-0 btn btn-sm btn-circle border  stroke-base-content !transition-none">{@render path($connectionPathType, true)}</div>
     {/if}
 </div>
 

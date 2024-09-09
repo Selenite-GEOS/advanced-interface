@@ -55,7 +55,7 @@
 {#if search}
 	<aside
 		use:searchPopup
-		class="flex flex-col gap-2 bg-base-200 p-4 rounded-box border border-base-content border-opacity-10"
+		class="flex flex-col gap-2 bg-base-200 p-4 rounded-box border border-base-content border-opacity-10 z-20"
 		use:shortcut={{
 			key: 'escape',
 			ignoreElements: [],
