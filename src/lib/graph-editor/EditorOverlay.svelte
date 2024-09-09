@@ -12,12 +12,12 @@
 	import RedoButton from './buttons/RedoButton.svelte';
 	import SaveButton from './buttons/SaveButton.svelte';
 	import UndoButton from './buttons/UndoButton.svelte';
-	import EditorButton from './EditorButton.svelte';
 	import Toolbar from './Toolbar.svelte';
 	import SearchButton from './buttons/SearchButton.svelte';
 	import BoxSelectionButton from './buttons/selection/BoxSelectionButton.svelte';
 	import InvertSelectionButton from './buttons/selection/InvertSelectionButton.svelte';
 	import MinimapButton from './buttons/MinimapButton.svelte';
+	import ConnectionTypeSelector from './buttons/ConnectionTypeSelector.svelte';
 
 	type Props = {
 		class?: string;
@@ -53,6 +53,7 @@
 			<InvertSelectionButton />
 		</Toolbar>
 		<Toolbar class="justify-end me-2">
+			<ConnectionTypeSelector />
 			<GridButton />
 			<MinimapButton />
 		</Toolbar>

@@ -125,8 +125,8 @@
 	{/await}
 {/snippet}
 
+<GraphEditorShortcuts />
 <div class="h-full w-full grid grid-cols-[0fr,1fr,0fr]">
-	<GraphEditorShortcuts />
 	<!-- Left side bar -->
 	<aside class="h-full bg-base-200">
 		<GraphBrowser />

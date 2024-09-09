@@ -5,9 +5,9 @@
 		shortcut,
 		shortcutToString,
 		type KeyboardShortcut,
-		type ShortcutSettings
+		contextMenu
 	} from '@selenite/commons';
-	import { contextMenu, type NodeFactory } from '@selenite/graph-editor';
+	import type { NodeFactory } from '@selenite/graph-editor';
 	import { upperFirst } from 'lodash-es';
 	import type { Snippet } from 'svelte';
 	import Fa from 'svelte-fa';

@@ -8,14 +8,15 @@
 		shortcut,
 		XmlSchema,
 		takeFocus,
-		handleFocusLeave
+		handleFocusLeave,
+		ContextMenu as ContextMenuComponent,
+		ModalComponent,
+		Modal,
 	} from '@selenite/commons';
 	import {
 		notifications,
 		NotificationsComponent,
-		ContextMenuComponent,
-		ModalComponent,
-		Modal,
+		
 		type NodeEditorSaveData
 	} from '@selenite/graph-editor';
 	import '../app.css';

@@ -37,7 +37,7 @@ export interface Graph {
 	/** Date of creation. */
 	createdAt: Date;
 	/** User IDs who added this graph to their favorites. */
-	favoriteOf: string[];
+	// favoriteOf: string[];
 	/** Version of the GEOS schema. */
 	schemaVersion: string;
 	/** Search tags of the graph. */

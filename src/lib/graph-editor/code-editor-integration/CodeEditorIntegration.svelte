@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { CodeEditorComponent } from '$lib/code-editor';
 	import {
-		contextMenu,
 		ErrorWNotif,
 		notifications,
 		XMLData,
@@ -11,7 +10,7 @@
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
 	import { _, persisted } from '$lib/global';
-	import { formatXml, shortcut, resizable, animationFrame, sleep } from '@selenite/commons';
+	import { formatXml, shortcut, resizable, animationFrame, sleep, contextMenu } from '@selenite/commons';
 	import { type Node } from '@selenite/graph-editor';
 	import { tick, untrack } from 'svelte';
 

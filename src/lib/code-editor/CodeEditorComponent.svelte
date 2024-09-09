@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { fade, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import { makeCodeEditor, type Model } from './CodeEditor.svelte';
 	import { getContext, persisted } from '$lib/global';
-	import { contextMenu, themeControl } from '@selenite/graph-editor';
+	import { themeControl } from '@selenite/graph-editor';
 	import { untrack, type Snippet } from 'svelte';
 	import {
 		download,

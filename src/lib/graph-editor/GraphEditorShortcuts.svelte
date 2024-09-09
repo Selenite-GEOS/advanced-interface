@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext } from '$lib/global';
 	import { shortcut } from '@selenite/commons';
-	import { contextMenu } from '@selenite/graph-editor';
+	import { contextMenu } from '@selenite/commons';
 	const editorContext = getContext('editor');
 </script>
 
