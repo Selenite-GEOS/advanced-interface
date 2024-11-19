@@ -9,6 +9,7 @@ on:
         'package.json',
         'tsconfig.json',
         'bun.lockb',
+        'pnpm-lock.yaml',
         '.github/workflows/release-tauri.yml',
         'svelte.config.js',
         'tailwind.config.js',
@@ -44,8 +45,9 @@ jobs:
       #   uses: actions/setup-node@v4
       #   with:
       #     node-version: lts/*
-      - name: setup bun
-        uses: oven-sh/setup-bun@v2
+      # - name: setup bun
+      #   uses: oven-sh/setup-bun@v2
+      - uses: pnpm/action-setup@v4
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -61,7 +63,7 @@ jobs:
         # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
 
       - name: install frontend dependencies
-        run: bun install # change this to npm, pnpm or bun depending on which one you use.
+        run: pnpm install
 
       - uses: tauri-apps/tauri-action@v0
         env:

@@ -3,9 +3,9 @@
 	"version": "../package.json",
 	"identifier": "fr.selenite.geos-graph-editor",
 	"build": {
-		"beforeDevCommand": "bun dev",
+		"beforeDevCommand": "pnpm dev",
 		"devUrl": "http://localhost:1420",
-		"beforeBuildCommand": "bun run build",
+		"beforeBuildCommand": "pnpm run build",
 		"frontendDist": "../build"
 	},
 	"app": {
