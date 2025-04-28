@@ -31,7 +31,7 @@
 	import ThemeSelector from '$lib/ThemeSelector.svelte';
 	import { flip } from 'svelte/animate';
 	import { createFloatingActions } from 'svelte-floating-ui';
-	import { offset } from 'svelte-floating-ui/core';
+	import { offset } from 'svelte-floating-ui/dom';
 	let { children } = $props();
 
 	const tabs = new Tabs();
@@ -77,7 +77,7 @@
 </script>
 
 {#snippet RenameTabModal(tab: Tab)}
-	<input bind:value={tab.label} class="input input-bordered text-base-content" />
+	<input bind:value={tab.label} class="input  text-base-content" />
 {/snippet}
 
 {#if tabs.additionalAddPopupVisible && tabs.additionalAddBtn}
@@ -95,7 +95,7 @@
 {/if}
 
 <div
-	class="grid grid-rows-[0fr,1fr] h-screen w-screen overflow-clip"
+	class="grid grid-rows-[0fr_1fr] h-screen w-screen overflow-clip"
 	use:shortcut={{ key: 's', ctrl: true, action: save, ignoreElements: [] }}
 	use:shortcut={{
 		shortcuts(e) {
@@ -116,21 +116,21 @@
 	}}
 >
 	<header
-		class="grid grid-cols-[0fr,1fr,0fr] items-center bg-base-300 gap-4 relative h-12 dborder-b border-neutral-content"
+		class="grid grid-cols-[0fr_1fr_0fr] items-center bg-base-300 gap-4 relative h-12 dborder-b border-neutral-content"
 	>
 		<h1 class="text-xl font-bold ms-4">GEOS</h1>
 
 		<div
 			role="tablist"
 			use:horizontalScroll
-			class="tabs tabs-lifted grow justify-start self-stretch w-full overflow-y-hidden overflow-x-auto scrollbar-thin"
+			class="tabs tabs-lift items-end grow justify-start self-stretch w-full overflow-y-hidden overflow-x-auto scrollbar-thin"
 		>
 			{#each tabs.tabs as tab (tab.id)}
 				<!-- Tab -->
 				<div
 					tabindex="0"
 					role="tab"
-					class="tab !cursor-pointer relative group min-w-[7.5rem] max-w-[14rem]"
+					class="tab cursor-pointer! relative group min-w-[7.5rem] max-w-[14rem]"
 					class:tab-active={tabs.selected === tab}
 					title={tab.label}
 					animate:flip={{ duration: tabs.selected === tab ? 100 : 100 }}
@@ -185,7 +185,7 @@
 				<button
 					class:tab-active={tabs.additionalAddPopupVisible}
 					class:!bg-neutral={tabs.additionalAddPopupVisible}
-					class="tab hover btn-ghost !ps-2 !pe-2"
+					class="tab hover btn-ghost ps-2! pe-2!"
 					onfocus={() => btn.prefetch?.()}
 					onpointerenter={() => btn.prefetch?.()}
 					onkeydown={(e) => {

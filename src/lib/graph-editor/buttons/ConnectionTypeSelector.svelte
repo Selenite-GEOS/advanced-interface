@@ -60,13 +60,13 @@
 	{#if hovered}
     <div class="flex" transition:slide={{axis: 'x', duration: 200}}>
 		{#each connectionPathTypes as type}
-			<Button class="btn-sm btn-circle btn-ghost {type !== $connectionPathType ?  'stroke-base-content' : `${themeControl.isLight ? 'stroke-neutral-content' : 'stroke-accent'} bg-neutral hover:bg-neutral`} {buttonsReady ? 'pointer-events-auto' : 'pointer-events-none'} !transition-none" onclick={() => ($connectionPathType = type)}>
+			<Button class="btn-sm btn-circle btn-ghost {type !== $connectionPathType ?  'stroke-base-content' : `${themeControl.isLight ? 'stroke-neutral-content' : 'stroke-accent'} bg-neutral hover:bg-neutral`} {buttonsReady ? 'pointer-events-auto' : 'pointer-events-none'} transition-none!" onclick={() => ($connectionPathType = type)}>
 				{@render path(type)}
 			</Button>
 		{/each}
         </div>
 	{:else}
-        <div class="absolute bg-opacity-50 inset-0 btn btn-sm btn-circle border  stroke-base-content !transition-none">{@render path($connectionPathType, true)}</div>
+        <div class="absolute bg-(--bg-btn)/50 inset-0 btn btn-sm btn-circle border  stroke-base-content transition-none!">{@render path($connectionPathType, true)}</div>
     {/if}
 </div>
 

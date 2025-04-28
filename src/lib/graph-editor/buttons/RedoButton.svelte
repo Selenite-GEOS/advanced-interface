@@ -17,7 +17,7 @@
 	label="Redo"
 	shortcut={['ctrl+shift+z', 'ctrl+y']}
 	icon={faRotateRight}
-	class="hover:btn-success text-success {$canRedo ? '' : '!bg-transparent'}"
+	class="hover:btn-success  {$canRedo ? 'not-hover:text-success' : 'bg-transparent!'}"
 	disabled={!$canRedo}
 	activeFactoryAction={(factory) => {
 		factory.bulkOperation(() => {

@@ -126,7 +126,7 @@
 {/snippet}
 
 <GraphEditorShortcuts />
-<div class="h-full w-full grid grid-cols-[0fr,1fr,0fr]">
+<div class="h-full w-full grid grid-cols-[0fr_1fr_0fr]">
 	<!-- Left side bar -->
 	<aside class="h-full bg-base-200">
 		<GraphBrowser />

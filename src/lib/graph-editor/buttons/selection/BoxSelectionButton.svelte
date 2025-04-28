@@ -18,7 +18,7 @@
 >
 	{#snippet icon()}
 		<div
-			class="border-base-content w-4 h-4 border-dashed border-[0.12rem] border-opacity-90"
+			class="border-base-content/90 w-4 h-4 border-dashed border-[0.12rem]"
 			class:!border-success-content={enabled}
 		></div>
 	{/snippet}

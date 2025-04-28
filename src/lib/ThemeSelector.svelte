@@ -9,7 +9,7 @@
 	<select
 		bind:value={themeControl.theme}
 		{...props}
-		class="select select-bordered text-base-content {props.class}"
+		class="select w-30 text-base-content {props.class}"
 		use:shortcut={{ key: 't', action: () => (themeControl.theme = themeControl.nextTheme) }}
 		use:shortcut={{ key: 'r', action: () => (themeControl.theme = themeControl.previousTheme) }}
 	>

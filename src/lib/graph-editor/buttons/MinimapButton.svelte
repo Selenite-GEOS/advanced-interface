@@ -35,6 +35,6 @@
 	description="Toggle the minimap."
 	shortcut="m"
 	icon={faMap}
-	class={$minimap ? '' : 'text-opacity-50'}
+	class={$minimap ? '' : 'text-current/50'}
 	onclick={toggleMap}
 />

@@ -1,16 +1,18 @@
 <script lang="ts">
 	import { CodeEditorComponent } from '$lib/code-editor';
-	import {
-		ErrorWNotif,
-		notifications,
-		XMLData,
-		XmlNode
-	} from '@selenite/graph-editor';
+	import { ErrorWNotif, notifications, XMLData, XmlNode } from '@selenite/graph-editor';
 	// import { ErrorWNotif, getContext, _ } from '$lib/global';
 	import 'regenerator-runtime/runtime';
 	import wu from 'wu';
 	import { _, persisted } from '$lib/global';
-	import { formatXml, shortcut, resizable, animationFrame, sleep, contextMenu } from '@selenite/commons';
+	import {
+		formatXml,
+		shortcut,
+		resizable,
+		animationFrame,
+		sleep,
+		contextMenu
+	} from '@selenite/commons';
 	import { type Node } from '@selenite/graph-editor';
 	import { tick, untrack } from 'svelte';
 
@@ -181,6 +183,7 @@
 					if (xmlData.length > 1) res.push(`<!-- ${previewedNode.outputs[k].label} -->`);
 					res.push(v.toXml());
 				}
+
 				untrack(() => {
 					this.xml = formatXml({ xml: res.join('\n') });
 					if (this.xml && this.model)
@@ -220,7 +223,7 @@
 	{#if !livePreview.active}
 		<div
 			transition:fade={{ duration: 200 }}
-			class="absolute bottom-0 top-0 -translate-x-1/2 z-[5] nope-pt-[2.64rem] pointer-events-none overflow-clip"
+			class="absolute bottom-0 top-0 -translate-x-1/2 z-5 nope-pt-[2.64rem] pointer-events-none overflow-clip"
 		>
 			<div class="h-full flex flex-col gap-2 justify-center pointer-events-none">
 				<CodeEditorIntegrationButton icon={faArrowRight} flip={'horizontal'} onclick={toGraph} />
@@ -232,10 +235,10 @@
 {/await}
 <section
 	transition:slide={{ axis: 'x', duration: 200 }}
-	class="relative grid h-full overflow-clip border-s-2 border-base-300 dborder-base-content dborder-opacity-20"
+	class="relative grid h-full overflow-clip border-s-2 border-base-300 dborder-base-content/20"
 >
 	<div
-		class="w-[40vw] grid grid-rows-[0fr,1fr,0fr]"
+		class="w-[40vw] grid grid-rows-[0fr_1fr_0fr]"
 		style="width: {$width}px;"
 		use:resizable={{ sides: { left: true }, onresize: ({ width: w }) => ($width = w) }}
 	>
@@ -270,7 +273,7 @@
 				</label>
 			{/snippet}
 		</CodeEditorComponent>
-		<div class="monaco-editor !outline-none">
+		<div class="monaco-editor outline-hidden!">
 			<h1
 				class="bottom-0 right-0 absolute z-10 select-none opacity-50 font-bold text-xl text-right text-nowrap truncate pe-8 py-2 text-base-content"
 				title="Code Editor"

@@ -79,7 +79,7 @@
 	<menu class="join flex flex-col rounded-none dborder-r border-neutral-content">
 		{#snippet SideButton(id: SelectionType, label: string, icon: IconDefinition, key: string)}
 			<button
-				class="join-item btn rounded-none h-[5rem] w-[5rem] shadow-none focus-visible:outline-none"
+				class="join-item btn rounded-none h-[5rem] w-[5rem] shadow-none focus-visible:outline-hidden"
 				title={`${id === selected ? 'Close' : 'Open'} ${id} macroblocks.\n(Shift+${key.toUpperCase()}, Alt+${key.toUpperCase()})`}
 				use:shortcut={{
 					shortcuts: [
@@ -154,7 +154,7 @@
 								bind:value={$userStore}
 								title={$userStore}
 								placeholder="User"
-								class="input input-bordered input-sm w-36 dlg:w-[12rem] truncate"
+								class="input  input-sm w-36 dlg:w-[12rem] truncate"
 							/>
 						{/if}
 					</div>

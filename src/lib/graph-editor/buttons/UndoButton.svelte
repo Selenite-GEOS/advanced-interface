@@ -15,7 +15,7 @@
 	label="Undo"
 	shortcut="ctrl+z"
 	icon={faRotateLeft}
-	class="hover:btn-warning  text-warning {$canUndo ? '' : '!bg-transparent'}"
+	class="hover:btn-warning  {$canUndo ? 'not-hover:text-warning' : 'bg-transparent!'}"
 	disabled={!$canUndo}
 	activeFactoryAction={(factory) => {
 		factory.bulkOperation(() => {

@@ -36,6 +36,6 @@
 	description="Toggle the grid."
 	shortcut="g"
 	icon={faTableCells}
-	class={$isGridDisplayed ? '' : 'text-opacity-50'}
+	class={$isGridDisplayed ? '' : 'text-current/50'}
 	onclick={toggleGrids}
 />

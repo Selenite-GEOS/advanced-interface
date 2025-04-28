@@ -7,7 +7,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import EditorButton from '../EditorButton.svelte';
 	import { createFloatingActions } from 'svelte-floating-ui';
-	import { offset, shift } from 'svelte-floating-ui/core';
+	import { offset, shift } from 'svelte-floating-ui/dom';
 	import { getContext } from '$lib/global';
 	import type { Action } from 'svelte/action';
 	import { untrack } from 'svelte';
@@ -55,7 +55,7 @@
 {#if search}
 	<aside
 		use:searchPopup
-		class="flex flex-col gap-2 bg-base-200 p-4 rounded-box border border-base-content border-opacity-10 z-20"
+		class="flex flex-col gap-2 bg-base-200 p-4 rounded-box border border-base-content/10 z-20"
 		use:shortcut={{
 			key: 'escape',
 			ignoreElements: [],
@@ -68,7 +68,7 @@
 		}}
 	>
 		<input
-			class="input input-bordered input-secondary pointer-events-auto mb-2"
+			class="input  input-secondary pointer-events-auto mb-2"
 			bind:value={q}
 			use:focus
 			placeholder="Search"

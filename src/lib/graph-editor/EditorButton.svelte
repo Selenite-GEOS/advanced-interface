@@ -85,7 +85,7 @@
 		}
 	}}
 	class:bg-opacity-50={displayIcon}
-	class="btn bg-opacity-50 {classes} pointer-events-auto"
+	class="btn bg-(--btn-bg)/50 {classes} pointer-events-auto"
 	onclick={triggerOnclick}
 >
 	{#if icon}
