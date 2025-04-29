@@ -71,7 +71,7 @@
 		});
 	});
 	const [specialAddRef, specialAddPopup] = createFloatingActions({
-		middleware: [offset({ crossAxis: 1 })],
+		middleware: [offset({ crossAxis: 0 })],
 		placement: 'bottom-start'
 	});
 </script>
@@ -88,7 +88,7 @@
 		use:specialAddPopup
 		use:takeFocus={true}
 		use:handleFocusLeave={() => (tabs.additionalAddPopupVisible = false)}
-		class="z-50 bg-neutral p-2 rounded-box flex gap-2 flex-col rounded-tl-none"
+		class="z-50 bg-neutral text-neutral-content p-2 rounded-box flex gap-2 flex-col rounded-tl-none"
 	>
 		{@render btn.snippet()}
 	</div>
@@ -183,9 +183,7 @@
 			{#if tabs.additionalAddBtn}
 				{@const btn = tabs.additionalAddBtn}
 				<button
-					class:tab-active={tabs.additionalAddPopupVisible}
-					class:!bg-neutral={tabs.additionalAddPopupVisible}
-					class="tab hover btn-ghost ps-2! pe-2!"
+					class="tab hover ps-2! pe-2! !border-b-0 {tabs.additionalAddPopupVisible && '!bg-neutral !text-neutral-content'}"
 					onfocus={() => btn.prefetch?.()}
 					onpointerenter={() => btn.prefetch?.()}
 					onkeydown={(e) => {

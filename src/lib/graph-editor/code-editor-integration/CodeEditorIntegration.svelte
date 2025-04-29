@@ -179,8 +179,10 @@
 				}
 				const res: string[] = [];
 				// res.push('<!-- ')
+				const prefix = '<' + '!--'
+				const suffix = '--' + '>';
 				for (const [k, v] of xmlData) {
-					if (xmlData.length > 1) res.push(`<!-- ${previewedNode.outputs[k].label} -->`);
+					if (xmlData.length > 1) res.push(`${prefix} ${previewedNode.outputs[k].label} ${suffix}`);
 					res.push(v.toXml());
 				}
 
