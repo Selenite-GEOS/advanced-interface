@@ -47,7 +47,7 @@
 		"prettier": "^3.5.3",
 		"rete-auto-arrange-plugin": "^2.0.2",
 		"runed": "^0.25.0",
-		"svelte": "^5.28.2",
+		"svelte": "^5.38.6",
 		"svelte-check": "^4.1.6",
 		"svelte-dnd-action": "^0.9.61",
 		"svelte-fa": "^4.0.4",
